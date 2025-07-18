@@ -1,51 +1,58 @@
-﻿using Ecommerce.Interfaces;
+﻿using Ecommerce.Data;
+using Ecommerce.Interfaces;
 using Ecommerce.Models;
-using Ecommerce.Repository;
 
 namespace Ecommerce.Services
 {
-    public class BaseService<T> : IBaseService<T> where T : EntityBase
+    public class BaseService<T> : IDisposable, IBaseService<T> where T : EntityBase
     {
-        private readonly BaseRepository<T> _repository; 
+        readonly Context _db;        
         public BaseService()
         {
-            if (_repository == null)
+            if (_db == null)
             {
-                _repository = new BaseRepository<T>();
+                _db = new Context();
             }
         }
-        public Guid Add(T item)
-        {
-            return _repository.Add(item);
-        }
-
         public T Get(Guid id)
         {
-            return _repository.Get(id);
+            return _db.Set<T>().FirstOrDefault(x => x.Id == id)!;
         }
 
         public IQueryable<T> GetList()
         {
-            return _repository.GetList();
+            return _db.Set<T>();
+        }
+
+        public Guid Add(T item)
+        {
+            _db.Set<T>().Add(item);
+            _db.SaveChanges();
+            return item.Id;
         }
 
         public void Remove(T item)
         {
-            _repository.Remove(item);
+            _db.Set<T>().Remove(item);
+            _db.SaveChanges();
         }
 
         public void Update(T item)
         {
-            _repository.Update(item);
+            _db.Set<T>().Update(item);
+            _db.SaveChanges();
         }
 
-        async public Task UpdateAsync(T item)
+        public async Task UpdateAsync(T item)
         {
-            await _repository.UpdateAsync(item);
+            _db.Set<T>().Update(item);
+            await _db.SaveChangesAsync();
         }
+
         public void Dispose()
         {
-            _repository.Dispose();
+            _db.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

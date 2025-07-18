@@ -1,5 +1,6 @@
 using Ecommerce.Data;
 using Ecommerce.Interfaces;
+using Ecommerce.Models;
 using Ecommerce.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 builder.Services.AddDbContext<Context>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Ecommerce")));
+
+builder.Services.AddTransient<ISiteConfigService, SiteConfigService>();
+
 
 
 var app = builder.Build();

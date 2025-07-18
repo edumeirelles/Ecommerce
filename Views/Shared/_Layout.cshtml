@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using System.Text.Json
+@{
+    var siteConfig = JsonSerializer.Deserialize<SiteConfig>(TempData["SiteConfig"].ToString());
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -21,6 +26,7 @@
     <link rel="stylesheet" href="~/css/plugins/jquery.countdown.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/vendor/line-awesome/css/line-awesome.min.css" asp-append-version="true" />
 </head>
+
 <body>
     <header class="header header-intro-clearance header-4">      
         <div class="header-top">
@@ -76,7 +82,7 @@
                     </button>
 
                     <a href="index.html" class="logo">
-                        <img src="assets/images/demos/demo-4/logo.png" alt="Molla Logo" width="105" height="25">
+                        <img src="@Url.Content(siteConfig.LogoPath)" alt="" width="105" height="25">
                     </a>
                 </div><!-- End .header-left -->
 
