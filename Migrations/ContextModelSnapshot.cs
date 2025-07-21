@@ -29,15 +29,24 @@ namespace Ecommerce.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImagePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("Price")
                         .HasColumnType("float");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
 
                     b.Property<string>("Type")
                         .IsRequired()
