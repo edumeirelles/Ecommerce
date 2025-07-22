@@ -1,9 +1,10 @@
-﻿using Ecommerce.Models;
+﻿using Ecommerce.Interfaces;
+using Ecommerce.Models;
 using Ecommerce.ViewModels;
 
 namespace Ecommerce.Services
 {
-    public class ProductService : BaseService<Product>
+    public class ProductService : BaseService<Product>, IProductService
     {
         public List<ProductViewModel> GetProducts() 
         {

@@ -4,7 +4,7 @@ namespace Ecommerce.Interfaces
 {
     public interface ISiteConfigService : IBaseService<SiteConfig>, IDisposable
     {
-        public SiteConfig GetSiteConfig(string siteKey);
+        SiteConfig GetSiteConfig(string siteKey);
     }
    
 }
