@@ -13,6 +13,7 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddDbContext<Context>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Ecommerce")));
 
 builder.Services.AddTransient<ISiteConfigService, SiteConfigService>();
+builder.Services.AddTransient<IProductService, ProductService>();
 
 
 

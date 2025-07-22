@@ -1,22 +1,28 @@
-using System.Diagnostics;
+using Ecommerce.Interfaces;
 using Ecommerce.Models;
+using Ecommerce.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Ecommerce.Controllers
 {
     public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
+        
+        private readonly IProductService _productService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IProductService productService)
         {
-            _logger = logger;
+            _productService = productService;
         }
 
         public IActionResult Index()
         {
-
-            return View();
+            var viewModel = new IndexViewModel()
+            {
+                
+            };
+            return View(viewModel);
         }
 
         public IActionResult Privacy()

@@ -10,13 +10,19 @@ namespace Ecommerce.Services
         {
             return this.GetList().Select(x=> new ProductViewModel()
             {
+                Id = x.Id,
                 Description = x.Description,
                 ImagePath = x.ImagePath,
                 Name = x.Name,
                 Details = x.Details ?? new Dictionary<string, object>(),
                 Price = x.Price,
                 Stock = x.Stock,
-                Type = x.Type,              
+                Category = new CategoryViewModel()
+                {
+                    Id = x.Category.Id,
+                    Name = x.Category.Name,
+                    ImgPath = x.Category.ImgPath
+                },              
 
             }).ToList();
         }
