@@ -37,9 +37,9 @@ namespace Ecommerce.Controllers
         }
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var pathBase = Request.PathBase.Value.Split("/").Length > 1 ? Request.PathBase.Value.Split("/")[Request.PathBase.Value.Split("/").Length - 1] : Request.PathBase.Value.Replace("/", "");
+            var pathBase = Request.PathBase.Value?.Split("/").Length > 1 ? Request.PathBase.Value.Split("/")[Request.PathBase.Value.Split("/").Length - 1] : Request.PathBase.Value?.Replace("/", "");
 
-            if (SiteConfig == null || string.IsNullOrEmpty(SiteConfig.SiteName) || SiteConfig.SiteName.ToUpper() != pathBase.ToUpper())
+            if (SiteConfig == null || string.IsNullOrEmpty(SiteConfig.SiteName) || SiteConfig.SiteName.ToUpper() != pathBase?.ToUpper())
             {                
                 SiteConfigService siteConfigService = new();
                 SiteConfig = siteConfigService.GetSiteConfig(pathBase);
