@@ -10,17 +10,19 @@ namespace Ecommerce.Controllers
     {
         
         private readonly IProductService _productService;
-
-        public HomeController(IProductService productService)
+        private readonly ICategoryService _categoryService;
+        public HomeController(IProductService productService, ICategoryService categoryService)
         {
             _productService = productService;
+            _categoryService = categoryService;
         }
 
         public IActionResult Index()
         {
             var viewModel = new IndexViewModel()
             {
-                
+                Products = _productService.GetProducts(),
+                Categories = _categoryService.GetCategories()
             };
             return View(viewModel);
         }

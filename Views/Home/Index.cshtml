@@ -71,16 +71,16 @@
         <h2 class="title text-center mb-4">Categorias</h2>
         <div class="cat-blocks-container">
             <div class="row">
-            @foreach(var i in Model.Types)
+            @foreach(var i in Model.Categories)
             {                
                 <div class="col">
                     <a href="category.html" class="cat-block">
                         <figure>
-                            <span>
-                                <img src="assets/images/demos/demo-4/cats/1.png" alt="Category image">
+                            <span class ="category-img">
+                                <img src="@Url.Content(i.ImgPath)" alt="Category image" >
                             </span>
                         </figure>
-                        <h3 class="cat-block-title">@Html.Raw(i)</h3>
+                        <h3 class="cat-block-title">@Html.Raw(i.Name)</h3>
                     </a>
                 </div> 
             }

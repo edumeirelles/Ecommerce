@@ -50,3 +50,13 @@ body {
     clip: auto;
     white-space: normal
 }
+.category-img {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+
+}
+.category-img img{
+    object-fit:cover;
+    
+}

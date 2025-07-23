@@ -6,7 +6,7 @@ namespace Ecommerce.ViewModels
 public class IndexViewModel
     {        
         public List<ProductViewModel> Products { get; set; }
-        public List<string> Types { get; set; }
+        public List<CategoryViewModel> Categories { get; set; }
 
     }
 }

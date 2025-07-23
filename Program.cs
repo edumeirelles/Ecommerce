@@ -14,6 +14,7 @@ builder.Services.AddDbContext<Context>(options => options.UseSqlServer(builder.C
 
 builder.Services.AddTransient<ISiteConfigService, SiteConfigService>();
 builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
 
 
 

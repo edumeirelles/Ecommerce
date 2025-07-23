@@ -11,6 +11,6 @@ namespace Ecommerce.ViewModels
         public int Stock { get; set; }
         public Dictionary<string, object>? Details { get; set; }
 
-        public CategoryViewModel Category { get; set; }
+        public CategoryViewModel? Category { get; set; }
     }
 }
