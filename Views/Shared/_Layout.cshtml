@@ -11,7 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
     <title>@ViewData["Title"] - Ecommerce</title>
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Ecommerce.styles.css" asp-append-version="true" />
 
@@ -83,7 +84,7 @@
                         <i class="icon-bars"></i>
                     </button>
 
-                    <a href="index.html" class="logo">
+                    <a href="@Url.Action("Index", "Home")" class="logo">
                         <img src="@Url.Content(siteConfig?.LogoPath)" alt="" width="105">
                     </a>
                 </div><!-- End .header-left -->

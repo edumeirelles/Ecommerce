@@ -5,5 +5,6 @@ namespace Ecommerce.Interfaces
     public interface ICategoryService
     {
         List<CategoryViewModel> GetCategories();
+        CategoryViewModel GetCategory(Guid id);
     }
 }

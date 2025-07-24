@@ -27,6 +27,22 @@ namespace Ecommerce.Controllers
             return View(viewModel);
         }
 
+        public IActionResult Category(Guid id)
+        {
+            var viewModel = _categoryService.GetCategory(id);
+
+            
+            if (viewModel == null)
+            {
+                return NotFound();
+            }
+
+            var categories = _categoryService.GetCategories();
+            ViewBag.Categories = categories;
+
+            return View(viewModel);
+        }
+
         public IActionResult Privacy()
         {
             return View();

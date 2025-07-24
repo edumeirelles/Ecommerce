@@ -74,7 +74,7 @@
             @foreach(var i in Model.Categories)
             {                
                 <div class="col">
-                    <a href="category.html" class="cat-block">
+                    <a href="@Url.Action("Category", new {id = i.Id})" class="cat-block">
                         <figure>
                             <span class ="category-img">
                                 <img src="@Url.Content(i.ImgPath)" alt="Category image" >

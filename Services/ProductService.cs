@@ -11,7 +11,7 @@ namespace Ecommerce.Services
             return this.GetList().Select(x=> new ProductViewModel()
             {
                 Id = x.Id,
-                Description = x.Description,
+                Description = x.Description ?? "",
                 ImagePath = x.ImagePath,
                 Name = x.Name,
                 Details = x.Details ?? new Dictionary<string, object>(),
@@ -22,7 +22,8 @@ namespace Ecommerce.Services
                     Id = x.Category.Id,
                     Name = x.Category.Name,
                     ImgPath = x.Category.ImgPath
-                },              
+                },    
+                DateAdded = x.DateAdded
 
             }).ToList();
         }
