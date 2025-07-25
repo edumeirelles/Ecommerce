@@ -17,10 +17,13 @@ namespace Ecommerce.Services
                 Products = x.Products.Where(p=> p.IsActive).Select(p => new ProductViewModel()
                 {
                     Id = p.Id,
-                    Name = p.Name,
-                    ImagePath = p.ImagePath,
-                    Price = p.Price
-
+                    Name = p.Name,                    
+                    Price = p.Price,
+                    ProductImages = p.ProductImages.Select(pi => new ProductImageViewModel()
+                    {
+                        Id = pi.Id,
+                        ImagePath = pi.ImagePath
+                    }).ToList()
                 }).ToList()
 
             }).OrderBy(x => x.Name).ToList();
@@ -42,9 +45,13 @@ namespace Ecommerce.Services
                 Products = category.Products.Where(p=> p.IsActive).Select(p => new ProductViewModel()
                 {
                     Id = p.Id,
-                    Name = p.Name,
-                    ImagePath = p.ImagePath,
-                    Price = p.Price
+                    Name = p.Name,                    
+                    Price = p.Price,
+                    ProductImages = p.ProductImages.Select(pi => new ProductImageViewModel()
+                    {
+                        Id = pi.Id,
+                        ImagePath = pi.ImagePath
+                    }).ToList(),
                 }).ToList()
             };
 

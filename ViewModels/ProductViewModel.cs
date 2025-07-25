@@ -11,6 +11,14 @@ namespace Ecommerce.ViewModels
         public int Stock { get; set; }
         public Dictionary<string, object>? Details { get; set; }
         public DateTime DateAdded { get; set; }
+        public Guid CategoryId { get; set; }
+        public List<ProductImageViewModel> ProductImages { get; set; } = [];
+
+    }
+
+    public class ProductImageViewModel : EntityBase
+    {
+        public required string ImagePath { get; set; }
         
     }
 }

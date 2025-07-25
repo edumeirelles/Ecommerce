@@ -115,7 +115,7 @@
                                             </div><!-- End .product-cat -->
                                             <h3 class="product-title"><a href="product.html">@Html.Raw(i.Name)</a></h3><!-- End .product-title -->
                                             <div class="product-price">
-                                                $@Html.Raw(i.Price.ToString("0.00", CultureInfo.CurrentCulture))
+                                                @((NumberFormatInfo.CurrentInfo.CurrencySymbol + " " + Html.Raw(i.Price.ToString("0.00", CultureInfo.CurrentCulture))))
                                             </div><!-- End .product-price -->
                                             <div class="ratings-container">
                                                 <div class="ratings">
