@@ -1,0 +1,8 @@
+﻿@model Ecommerce.ViewModels.ProductViewModel
+
+<div>
+    @foreach(var i in Model.Details)
+    {
+        @(i.Key + " " + i.Value)
+    }
+</div>

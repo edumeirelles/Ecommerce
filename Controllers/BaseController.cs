@@ -9,6 +9,8 @@ namespace Ecommerce.Controllers
 {
     public class BaseController : Controller
     {
+        protected IProductService _productService;
+        protected ICategoryService _categoryService;
         public SiteConfig siteConfig { get; set; }
         public SiteConfig? SiteConfig
         {
@@ -50,6 +52,7 @@ namespace Ecommerce.Controllers
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             TempData["SiteConfig"] = JsonSerializer.Serialize(SiteConfig);
+            ViewBag.Categories = _categoryService.GetCategories();
 
             base.OnActionExecuted(context);
         }

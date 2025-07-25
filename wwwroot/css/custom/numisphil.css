@@ -1,3 +1,12 @@
-#header-container {
+.header-middle .header-right,
+.header-middle .header-center,
+.header-middle .header-left {
     background-color: #381f0f;
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
+    
+}
+.header-middle .header-right,
+.header-middle .header-left {
+    justify-content: center
 }
