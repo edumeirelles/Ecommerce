@@ -19,6 +19,7 @@ namespace Ecommerce.Services
                     Id = p.Id,
                     Name = p.Name,                    
                     Price = p.Price,
+                    CategoryId = p.Category.Id,
                     ProductImages = p.ProductImages.Select(pi => new ProductImageViewModel()
                     {
                         Id = pi.Id,
@@ -31,7 +32,7 @@ namespace Ecommerce.Services
 
         public CategoryViewModel GetCategory(Guid id)
         {
-            var category = GetList().Where(x => x.Id == id && x.IsActive).Include(x => x.Products).FirstOrDefault();
+            var category = GetList().Where(x => x.Id == id && x.IsActive).Include(x => x.Products).ThenInclude(p=> p.ProductImages).FirstOrDefault();
             if (category == null)
             {
                 return new CategoryViewModel();
@@ -47,11 +48,12 @@ namespace Ecommerce.Services
                     Id = p.Id,
                     Name = p.Name,                    
                     Price = p.Price,
+                    CategoryId = p.Category.Id,
                     ProductImages = p.ProductImages.Select(pi => new ProductImageViewModel()
                     {
                         Id = pi.Id,
                         ImagePath = pi.ImagePath
-                    }).ToList(),
+                    }).OrderBy(x=> x.ImagePath).ToList(),
                 }).ToList()
             };
 

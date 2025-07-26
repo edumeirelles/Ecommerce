@@ -6,8 +6,7 @@ namespace Ecommerce.ViewModels
     {       
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public double Price { get; set; }        
-        public string? ImagePath { get; set; }
+        public double Price { get; set; } 
         public int Stock { get; set; }
         public Dictionary<string, object>? Details { get; set; }
         public DateTime DateAdded { get; set; }
@@ -18,7 +17,8 @@ namespace Ecommerce.ViewModels
 
     public class ProductImageViewModel : EntityBase
     {
-        public required string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
+
         
     }
 }

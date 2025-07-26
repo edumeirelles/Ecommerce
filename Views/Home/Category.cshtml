@@ -88,14 +88,14 @@
 
                     <div class="products mb-3">
                         <div class="row justify-content-center">
-                            @foreach(var i in Model.Products)
+                            @foreach (var i in Model.Products)
                             {
                                 <div class="col-6">
                                     <div class="product product-7 text-center">
                                         <figure class="product-media">
                                             <span class="product-label label-new">New</span>
-                                            <a href="@Url.Action("Product", new {id = i.Id})">
-                                                <img src="@Url.Content(i.ImagePath)" alt="@i.Name" class="product-image">
+                                            <a href="@Url.Action("Product", new { id = i.Id })">
+                                                <img src="@Url.Content(i.ProductImages.FirstOrDefault().ImagePath)" alt="@i.Name" class="product-image">
                                             </a>
 
                                             <div class="product-action-vertical">
@@ -125,26 +125,24 @@
                                             </div><!-- End .rating-container -->
 
                                             <div class="product-nav product-nav-thumbs">
-                                                <a href="#" class="active">
-                                                    <img src="assets/images/products/product-4-thumb.jpg" alt="product desc">
-                                                </a>
-                                                <a href="#">
-                                                    <img src="assets/images/products/product-4-2-thumb.jpg" alt="product desc">
-                                                </a>
+                                                @foreach (var j in i.ProductImages)
+                                                {
+                                                    <a href="#" class="active">
+                                                        <img src="@Url.Content(j.ImagePath)" alt="product desc">
+                                                    </a>
+                                                }
 
-                                                <a href="#">
-                                                    <img src="assets/images/products/product-4-3-thumb.jpg" alt="product desc">
-                                                </a>
+
                                             </div><!-- End .product-nav -->
                                         </div><!-- End .product-body -->
                                     </div><!-- End .product -->
                                 </div>
-                            
+
                                 <!-- End .col-sm-6 -->
                             }
-                            
 
-                            
+
+
                         </div><!-- End .row -->
                     </div><!-- End .products -->
 
@@ -185,7 +183,7 @@
                             <div class="collapse show" id="widget-1">
                                 <div class="widget-body">
                                     <div class="filter-items filter-items-count">
-                                        @foreach(var i in (List<CategoryViewModel>)ViewBag.Categories)
+                                        @foreach (var i in (List<CategoryViewModel>)ViewBag.Categories)
                                         {
                                             <div class="filter-item">
                                                 <div class="custom-control custom-checkbox">

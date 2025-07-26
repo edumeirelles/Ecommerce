@@ -23,14 +23,14 @@ namespace Ecommerce.Services
                 {
                     Id = pi.Id,
                     ImagePath = pi.ImagePath
-                }).ToList()
+                }).OrderBy(x=> x.ImagePath).ToList()
 
             }).ToList();
         }
 
         public ProductViewModel GetProduct(Guid id)
         {
-            var product = GetList().Where(x => x.Id == id && x.IsActive).Include(x=> x.Category).FirstOrDefault();
+            var product = GetList().Where(x => x.Id == id && x.IsActive).Include(x=> x.Category).Include(x=> x.ProductImages).FirstOrDefault();
             if (product == null)
             {
                 return new ProductViewModel();
@@ -49,7 +49,7 @@ namespace Ecommerce.Services
                 {
                     Id = pi.Id,
                     ImagePath = pi.ImagePath
-                }).ToList()
+                }).OrderBy(x=> x.ImagePath).ToList()
             };
         }
     }

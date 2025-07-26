@@ -40,7 +40,7 @@
                                 <div class="product-gallery">
                                     <figure class="product-main-image">
                                         <span class="product-label label-top">Top</span>
-                                        <img id="product-zoom" src="@Url.Content(Model.ImagePath)" data-zoom-image="@Url.Content(Model.ImagePath)" alt="product image">
+                                        <img id="product-zoom" src="@Url.Content(Model.ProductImages.FirstOrDefault().ImagePath)" data-zoom-image="@Url.Content(Model.ProductImages.FirstOrDefault().ImagePath)" alt="product image">
 
                                         <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                             <i class="icon-arrows"></i>
@@ -454,7 +454,7 @@
                                     <div class="product product-sm">
                                         <figure class="product-media">
                                             <a href="@Url.Action("Product", new {id = i.Id})">
-                                                <img src="@Url.Content(i.ImagePath)" alt="@i.Name" class="product-image">
+                                                <img src="@Url.Content(i.ProductImages.FirstOrDefault().ImagePath)" alt="@i.Name" class="product-image">
                                             </a>
                                         </figure>
 
