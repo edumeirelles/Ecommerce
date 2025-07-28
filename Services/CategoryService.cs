@@ -23,8 +23,9 @@ namespace Ecommerce.Services
                     ProductImages = p.ProductImages.Select(pi => new ProductImageViewModel()
                     {
                         Id = pi.Id,
-                        ImagePath = pi.ImagePath
-                    }).ToList()
+                        ImagePath = pi.ImagePath,
+                        Order = pi.Order
+                    }).OrderBy(x=> x.Order).ThenBy(x => x.ImagePath).ToList()
                 }).ToList()
 
             }).OrderBy(x => x.Name).ToList();
@@ -52,8 +53,9 @@ namespace Ecommerce.Services
                     ProductImages = p.ProductImages.Select(pi => new ProductImageViewModel()
                     {
                         Id = pi.Id,
-                        ImagePath = pi.ImagePath
-                    }).OrderBy(x=> x.ImagePath).ToList(),
+                        ImagePath = pi.ImagePath,
+                        Order = pi.Order
+                    }).OrderBy(x=> x.Order).ThenBy(x=> x.ImagePath).ToList(),
                 }).ToList()
             };
 

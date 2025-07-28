@@ -18,7 +18,8 @@ namespace Ecommerce.ViewModels
     public class ProductImageViewModel : EntityBase
     {
         public string? ImagePath { get; set; }
+        public int? Order { get; set; }
 
-        
+
     }
 }

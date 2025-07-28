@@ -19,6 +19,7 @@
     {
         public required string ImagePath { get; set; }
         public required Guid ProductId { get; set; }
+        public int? Order { get; set; }
         public required virtual Product Product { get; set; }
     }
 
