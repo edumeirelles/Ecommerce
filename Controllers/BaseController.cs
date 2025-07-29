@@ -1,5 +1,5 @@
 ﻿using Ecommerce.Interfaces;
-using Ecommerce.Models;
+using DAL.Models;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

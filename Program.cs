@@ -1,6 +1,5 @@
-using Ecommerce.Data;
+using DAL;
 using Ecommerce.Interfaces;
-using Ecommerce.Models;
 using Ecommerce.Services;
 using Microsoft.EntityFrameworkCore;
 

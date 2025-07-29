@@ -1,6 +1,7 @@
-﻿using Ecommerce.Data;
+﻿using DAL;
+using DAL.Models;
 using Ecommerce.Interfaces;
-using Ecommerce.Models;
+
 
 namespace Ecommerce.Services
 {

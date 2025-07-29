@@ -1,5 +1,5 @@
-﻿using Ecommerce.Interfaces;
-using Ecommerce.Models;
+﻿using DAL.Models;
+using Ecommerce.Interfaces;
 using Ecommerce.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,7 +41,7 @@ namespace Ecommerce.Services
                 Id = product.Id,
                 Description = product.Description ?? string.Empty,                
                 Name = product.Name,
-                Details = product.Details ?? new Dictionary<string, object>(),
+                Details = product.Details ?? [],
                 Price = product.Price,
                 Stock = product.Stock,
                 DateAdded = product.DateAdded, 
