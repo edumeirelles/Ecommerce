@@ -63,6 +63,7 @@ public class Context : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>,
 
         public DbSet<Product> Products { get; set; }
         public DbSet<SiteConfig> SiteConfig { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
                
 }
