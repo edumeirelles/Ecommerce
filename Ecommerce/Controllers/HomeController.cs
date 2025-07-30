@@ -6,14 +6,8 @@ using System.Diagnostics;
 namespace Ecommerce.Controllers
 {
     [Route("[controller]/[action]")]
-    public class HomeController : BaseController
-    {   
-        public HomeController(IProductService productService, ICategoryService categoryService)
-        {
-            _productService = productService;
-            _categoryService = categoryService;
-        }
-
+    public class HomeController(ICategoryService categoryService, IProductService productService, ISiteConfigService siteConfigService) : BaseController(categoryService, productService, siteConfigService)
+    {
         [Route("~/")]
         [Route("/Home")]
         [Route("/Home/Index")]
@@ -28,15 +22,15 @@ namespace Ecommerce.Controllers
         }
 
         [Route("/Category")]
-        [HttpGet]        
+        [HttpGet]
         public IActionResult Category(Guid id)
         {
             var viewModel = _categoryService.GetCategory(id);
-            
+
             if (viewModel == null)
             {
                 return NotFound();
-            }   
+            }
 
             return View(viewModel);
         }
@@ -58,7 +52,5 @@ namespace Ecommerce.Controllers
         {
             return View();
         }
-
-        
     }
 }

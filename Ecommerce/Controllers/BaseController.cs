@@ -1,17 +1,18 @@
 ﻿using Ecommerce.Interfaces;
 using Ecommerce.ViewModels;
-using Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text.Json;
 
 namespace Ecommerce.Controllers
 {
-    public class BaseController : Controller
+    public class BaseController(ICategoryService categoryService, IProductService productService, ISiteConfigService siteConfigService) : Controller
     {
-        protected IProductService _productService;
-        protected ICategoryService _categoryService;
-        public SiteConfigViewModel siteConfig { get; set; }
+        protected IProductService _productService = productService;
+        protected ICategoryService _categoryService = categoryService;
+        protected ISiteConfigService _siteConfigService = siteConfigService;       
+
+        public SiteConfigViewModel? siteConfig { get; set; }
         public SiteConfigViewModel? SiteConfig
         {
             get
@@ -42,9 +43,8 @@ namespace Ecommerce.Controllers
             var pathBase = Request.PathBase.Value?.Split("/").Length > 1 ? Request.PathBase.Value.Split("/")[Request.PathBase.Value.Split("/").Length - 1] : Request.PathBase.Value?.Replace("/", "");
 
             if (SiteConfig == null || string.IsNullOrEmpty(SiteConfig.SiteName) || SiteConfig.SiteName.ToUpper() != pathBase?.ToUpper())
-            {                
-                SiteConfigService siteConfigService = new();
-                SiteConfig = siteConfigService.GetSiteConfig(pathBase);
+            {  
+                SiteConfig = _siteConfigService.GetSiteConfig(pathBase!);
             }
 
             base.OnActionExecuting(context);
