@@ -1,12 +1,13 @@
-﻿using Ecommerce.Data;
+﻿using DAL;
+using DAL.Models;
 using Ecommerce.Interfaces;
-using Ecommerce.Models;
+
 
 namespace Ecommerce.Services
 {
     public class BaseService<T> : IDisposable, IBaseService<T> where T : EntityBase
     {
-        readonly Context _db;        
+        private readonly Context _db;        
         public BaseService()
         {
             if (_db == null)

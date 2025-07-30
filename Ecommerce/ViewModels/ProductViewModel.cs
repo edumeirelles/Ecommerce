@@ -1,8 +1,8 @@
-﻿using Ecommerce.Models;
+﻿using Ecommerce.ViewModels;
 
 namespace Ecommerce.ViewModels
 {
-    public class ProductViewModel : EntityBase
+    public class ProductViewModel : EntityBaseViewModel
     {       
         public string? Name { get; set; }
         public string? Description { get; set; }
@@ -15,7 +15,7 @@ namespace Ecommerce.ViewModels
 
     }
 
-    public class ProductImageViewModel : EntityBase
+    public class ProductImageViewModel : EntityBaseViewModel
     {
         public string? ImagePath { get; set; }
         public int? Order { get; set; }

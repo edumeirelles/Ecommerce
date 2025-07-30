@@ -1,14 +1,14 @@
-﻿using Ecommerce.Models;
+﻿using DAL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 
-namespace Ecommerce.Data
+namespace DAL
 {
-    
-public class Context : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>
+    public class Context : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>
     {
         public Context()
         {
@@ -25,8 +25,8 @@ public class Context : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>,
                     .AddJsonFile("appsettings.json")
                     .Build();
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("Ecommerce"));
-               
-            }       
+
+            }
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,5 +65,5 @@ public class Context : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>,
         public DbSet<SiteConfig> SiteConfig { get; set; }
         public DbSet<Category> Categories { get; set; }
     }
-               
+
 }

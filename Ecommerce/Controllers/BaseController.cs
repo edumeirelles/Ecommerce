@@ -1,5 +1,5 @@
 ﻿using Ecommerce.Interfaces;
-using Ecommerce.Models;
+using Ecommerce.ViewModels;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -11,8 +11,8 @@ namespace Ecommerce.Controllers
     {
         protected IProductService _productService;
         protected ICategoryService _categoryService;
-        public SiteConfig siteConfig { get; set; }
-        public SiteConfig? SiteConfig
+        public SiteConfigViewModel siteConfig { get; set; }
+        public SiteConfigViewModel? SiteConfig
         {
             get
             {
@@ -20,7 +20,7 @@ namespace Ecommerce.Controllers
                     return siteConfig;
                 if (string.IsNullOrEmpty(Request.Cookies["SiteConfig"]))
                     return null;
-                return JsonSerializer.Deserialize<SiteConfig>(Request.Cookies["SiteConfig"]);
+                return JsonSerializer.Deserialize<SiteConfigViewModel>(Request.Cookies["SiteConfig"]);
             }
             set
             {

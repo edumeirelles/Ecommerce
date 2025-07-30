@@ -1,8 +1,8 @@
-﻿using Ecommerce.Models;
+﻿using Ecommerce.ViewModels;
 
 namespace Ecommerce.ViewModels
 {
-    public class CategoryViewModel : EntityBase
+    public class CategoryViewModel : EntityBaseViewModel
     {
         public string? Name { get; set; }
         public string? ImgPath { get; set; }

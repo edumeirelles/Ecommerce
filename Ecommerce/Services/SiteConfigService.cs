@@ -1,16 +1,30 @@
-﻿using Ecommerce.Data;
+﻿using DAL.Models;
 using Ecommerce.Interfaces;
-using Ecommerce.Models;
+using Ecommerce.ViewModels;
+
 
 namespace Ecommerce.Services
 {
     public class SiteConfigService : BaseService<SiteConfig>, ISiteConfigService
     {       
 
-        public SiteConfig GetSiteConfig(string siteKey)
+        public SiteConfigViewModel GetSiteConfig(string siteKey)
         {
-            return this.GetList().FirstOrDefault(x => x.SiteName == siteKey)
-                ?? throw new KeyNotFoundException($"Site configuration for '{siteKey}' not found.");
+            var siteConfig = GetList().FirstOrDefault(x => x.SiteName == siteKey);
+            return new SiteConfigViewModel
+            {
+                Address = siteConfig?.Address,
+                ContactEmail = siteConfig?.ContactEmail,
+                ContactPhone = siteConfig?.ContactPhone,
+                CssPath = siteConfig?.CssPath,
+                FaviconPath = siteConfig?.FaviconPath,
+                LogoPath = siteConfig?.LogoPath,
+                SiteName = siteConfig?.SiteName,
+                SiteUrl = siteConfig?.SiteUrl,
+                
+            } ?? throw new KeyNotFoundException($"Site configuration for '{siteKey}' not found.");
         }
+
+       
     }
 }
