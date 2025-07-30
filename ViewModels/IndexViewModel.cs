@@ -1,4 +1,7 @@
-﻿namespace Ecommerce.ViewModels
+﻿using Ecommerce.Interfaces;
+using Ecommerce.Models;
+
+namespace Ecommerce.ViewModels
 {    
 public class IndexViewModel
     {        

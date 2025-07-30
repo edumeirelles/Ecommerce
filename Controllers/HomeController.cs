@@ -1,5 +1,5 @@
 using Ecommerce.Interfaces;
-using DAL.Models;
+using Ecommerce.Models;
 using Ecommerce.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

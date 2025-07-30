@@ -1,4 +1,4 @@
-﻿using DAL.Models;
+﻿using Ecommerce.Models;
 using Ecommerce.ViewModels;
 
 namespace Ecommerce.Interfaces
