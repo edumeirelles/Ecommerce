@@ -57,13 +57,26 @@ namespace DAL
                 ));
 
             modelBuilder.Entity<Product>().Property(p => p.Details).HasColumnType("nvarchar(max)");
+            
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey("CategoryId")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ProductImage>()
+                .HasOne(p=> p.Product)
+                .WithMany(p => p.ProductImages)
+                .HasForeignKey("ProductId")
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<Product> Products { get; set; }
         public DbSet<SiteConfig> SiteConfig { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
     }
 
 }

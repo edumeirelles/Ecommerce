@@ -1,7 +1,8 @@
-using Ecommerce.Interfaces;
+using DAL.Interfaces;
+using DAL.Services;
 using DAL;
-using Ecommerce.Services;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<Context>(options => options.UseSqlServer(builder.C
 
 builder.Services.AddTransient<ISiteConfigService, SiteConfigService>();
 builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IProductImageService, ProductImageService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 
 

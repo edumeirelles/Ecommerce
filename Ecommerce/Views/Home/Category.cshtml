@@ -1,6 +1,6 @@
-﻿@using Ecommerce.ViewModels
+﻿@using DAL.ViewModels
 @using System.Globalization
-@model Ecommerce.ViewModels.CategoryViewModel
+@model DAL.ViewModels.CategoryViewModel
 
 <main class="main">
     <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
@@ -95,7 +95,7 @@
                                         <figure class="product-media">
                                             <span class="product-label label-new">New</span>
                                             <a href="@Url.Action("Product", new { id = i.Id })">
-                                                <img src="@Url.Content(i.ProductImages.FirstOrDefault().ImagePath)" alt="@i.Name" class="product-image">
+                                                <img src="@Url.Content(i.ProductImages!.FirstOrDefault()!.ImagePath!)" alt="@i.Name" class="product-image">
                                             </a>
 
                                             <div class="product-action-vertical">
@@ -125,7 +125,7 @@
                                             </div><!-- End .rating-container -->
 
                                             <div class="product-nav product-nav-thumbs">
-                                                @foreach (var j in i.ProductImages)
+                                                @foreach (var j in i.ProductImages!)
                                                 {
                                                     <a href="#" class="active">
                                                         <img src="@Url.Content(j.ImagePath)" alt="product desc">
@@ -190,7 +190,7 @@
                                                     <input type="checkbox" class="custom-control-input" id="@i.Id">
                                                     <label class="custom-control-label" for="@i.Id">@Html.Raw(i.Name)</label>
                                                 </div>
-                                                <span class="item-count">@i.Products.Count</span>
+                                                <span class="item-count">@i.Products?.Count</span>
                                             </div>
                                         }
                                     </div>

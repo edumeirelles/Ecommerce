@@ -1,7 +1,6 @@
-using Ecommerce.Interfaces;
-using Ecommerce.ViewModels;
+using DAL.Interfaces;
+using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace Ecommerce.Controllers
 {

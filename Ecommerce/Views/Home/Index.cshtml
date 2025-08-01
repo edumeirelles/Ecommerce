@@ -1,4 +1,4 @@
-﻿@model Ecommerce.ViewModels.IndexViewModel
+﻿@model DAL.ViewModels.IndexViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -71,7 +71,7 @@
         <h2 class="title text-center mb-4">Categorias</h2>
         <div class="cat-blocks-container">
             <div class="row">
-            @foreach(var i in Model.Categories)
+            @foreach(var i in Model.Categories!)
             {                
                 <div class="col">
                     <a href="@Url.Action("Category", new {id = i.Id})" class="cat-block">

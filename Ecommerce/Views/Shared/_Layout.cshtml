@@ -1,7 +1,7 @@
 ﻿@using System.Text.Json
-@using Ecommerce.ViewModels
+@using DAL.ViewModels
 @{
-    var siteConfig = JsonSerializer.Deserialize<SiteConfig>(TempData["SiteConfig"].ToString());    
+    var siteConfig = JsonSerializer.Deserialize<SiteConfig>(TempData["SiteConfig"]?.ToString()!);    
 }
 
 <!DOCTYPE html>

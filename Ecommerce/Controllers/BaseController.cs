@@ -1,5 +1,5 @@
-﻿using Ecommerce.Interfaces;
-using Ecommerce.ViewModels;
+﻿using DAL.Interfaces;
+using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text.Json;
@@ -21,7 +21,7 @@ namespace Ecommerce.Controllers
                     return siteConfig;
                 if (string.IsNullOrEmpty(Request.Cookies["SiteConfig"]))
                     return null;
-                return JsonSerializer.Deserialize<SiteConfigViewModel>(Request.Cookies["SiteConfig"]);
+                return JsonSerializer.Deserialize<SiteConfigViewModel>(Request.Cookies["SiteConfig"]!);
             }
             set
             {
