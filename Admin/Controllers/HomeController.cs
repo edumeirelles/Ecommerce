@@ -4,38 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Admin.Controllers
 {
-    public class HomeController(ILogger<HomeController> logger, IProductService productService) : Controller
+    public class HomeController(ILogger<HomeController> logger, ICategoryService categoryService, IProductService productService, ISiteConfigService siteConfigService) : BaseController(categoryService, productService, siteConfigService)
     {
-        private readonly ILogger<HomeController> _logger = logger;
-        private readonly IProductService _productService = productService;
+        private readonly ILogger<HomeController> _logger = logger;        
 
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Index(ProductViewModel viewModel)
-        {
-            viewModel.CategoryId = new Guid("098268d4-617a-413f-88f6-73521cded0f6");
-            if (!ModelState.IsValid) 
-            {
-                return View();
-            }
-            _productService.AddProduct(viewModel);
-            return View();
-        }
-
-
-
-
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-       
+        
     }
 }
