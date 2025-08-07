@@ -4,4 +4,19 @@
     ViewData["Title"] = "Produtos";
 }
 
-<h1>Produtos</h1>
+<div class="row">
+    @foreach(var i in Model)
+    {
+        <div class="col-3">
+            <div class="card w-100">
+                <div class="card-body">
+                    <div class="d-md-flex align-items-center">
+                        <a href="#">
+                            <img src="@Url.Content(i.ProductImages.FirstOrDefault().ImagePath)" class="product-image" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -2,6 +2,8 @@ using DAL;
 using DAL.Interfaces;
 using DAL.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,24 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseStaticFiles();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseStaticFiles(new StaticFileOptions()
+    {
+        FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), @"../wwwroot/"))
+    });
+}
+else
+{
+    app.UseStaticFiles(new StaticFileOptions()
+    {
+        FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), @"./../Ecommerce/wwwroot/"))
+    });
+}
 app.UseHttpsRedirection();
 app.UseRouting();
 

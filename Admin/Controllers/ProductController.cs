@@ -7,11 +7,13 @@ namespace Admin.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            var viewModel = _productService.GetProducts();
+            return View(viewModel);
         }
-        public IActionResult Product()
-        {            
-            return View(_productService.GetProducts());
+        public IActionResult Product(Guid id)
+        {
+            var viewModel = _productService.GetProduct(id);
+            return View(viewModel);
         }
     }
 }
