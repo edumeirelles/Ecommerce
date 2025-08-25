@@ -3,7 +3,7 @@
     public interface IBaseService<T> where T : class
     {
         T Get(Guid id);
-        IQueryable<T> GetList();
+        List<T> GetList();
         Guid Add(T item);
         void Remove(T item);
         void Update(T item);

@@ -3,18 +3,22 @@
 @{
     ViewData["Title"] = "Produtos";
 }
+<h1 class="h1">Produtos</h1>
 
 <div class="row">
-    @foreach(var i in Model)
+    @foreach (var i in Model)
     {
         <div class="col-3">
-            <div class="card w-100">
+            <div class="card w-100" title="@($"Clique para editar o produto {Html.Raw(i.Title)}")">
                 <div class="card-body">
                     <div class="d-md-flex align-items-center">
-                        <a href="#">
+                        <a href="@Url.Action("ProductDetails", "Product", new { id = i.Id })">
                             <img src="@Url.Content(i.ProductImages.FirstOrDefault().ImagePath)" class="product-image" />
                         </a>
                     </div>
+                </div>
+                <div class="card-footer">
+                    <label class="card-title">@Html.Raw(i.Title)</label>
                 </div>
             </div>
         </div>

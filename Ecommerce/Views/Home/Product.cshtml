@@ -60,7 +60,7 @@
 
                             <div class="col-md-6">
                                 <div class="product-details product-details-sidebar">
-                                    <h1 class="product-title">@Html.Raw(Model.Name)</h1><!-- End .product-title -->
+                                    <h1 class="product-title">@Html.Raw(Model.Title)</h1><!-- End .product-title -->
 
                                     <div class="ratings-container">
                                         <div class="ratings">
@@ -433,12 +433,12 @@
                                     <div class="product product-sm">
                                         <figure class="product-media">
                                             <a href="@Url.Action("Product", new {id = i.Id})">
-                                                <img src="@Url.Content(i.ProductImages?.FirstOrDefault()!.ImagePath)" alt="@i.Name" class="product-image">
+                                                <img src="@Url.Content(i.ProductImages?.FirstOrDefault()!.ImagePath)" alt="@i.Title" class="product-image">
                                             </a>
                                         </figure>
 
                                         <div class="product-body">
-                                            <h5 class="product-title"><a href="@Url.Action("Product", new { id = i.Id })">@Html.Raw(i.Name)</a></h5>
+                                            <h5 class="product-title"><a href="@Url.Action("Product", new { id = i.Id })">@Html.Raw(i.Title)</a></h5>
                                             <div class="product-price">
                                                 <span class="new-price">@((NumberFormatInfo.CurrentInfo.CurrencySymbol + " " + Html.Raw(i.Price.ToString("0.00", CultureInfo.CurrentCulture))))</span>
                                             </div><!-- End .product-price -->

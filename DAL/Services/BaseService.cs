@@ -18,9 +18,9 @@ namespace DAL.Services
             return _db.Set<T>().FirstOrDefault(x => x.Id == id)!;
         }
 
-        public IQueryable<T> GetList()
+        public List<T> GetList()
         {
-            return _db.Set<T>();
+            return _db.Set<T>().ToList();
         }
 
         public Guid Add(T item)

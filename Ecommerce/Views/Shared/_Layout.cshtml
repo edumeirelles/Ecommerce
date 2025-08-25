@@ -197,7 +197,7 @@
                                 <ul class="menu-vertical sf-arrows">
                                     @foreach (var i in (List<CategoryViewModel>)ViewBag.Categories)
                                     {
-                                        <li class=""><a href="@Url.Action("Category", new {id = i.Id})">@Html.Raw(i.Name)</a></li>
+                                        <li class=""><a href="@Url.Action("Category", new {id = i.Id})">@Html.Raw(i.Title)</a></li>
                                     }
                                     
                                 </ul><!-- End .menu-vertical -->

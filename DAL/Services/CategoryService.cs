@@ -5,57 +5,36 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Services
 {
-    public class CategoryService(IProductImageService productImageService) : BaseService<Category>, ICategoryService
+    public class CategoryService(IProductService productService) : BaseService<Category>, ICategoryService
     {
-        private readonly IProductImageService _productImageService = productImageService;
+
+        private readonly IProductService _productService = productService;
         public List<CategoryViewModel> GetCategories()
-        {            
-            return GetList().Where(x=> x.IsActive).Select(x => new CategoryViewModel()
+        {
+            return GetList().Where(x => x.IsActive).Select(x => new CategoryViewModel()
             {
                 Id = x.Id,
-                Name = x.Name,
+                Title = x.Title,
                 ImgPath = x.ImgPath,
-                Products = x.Products!.Where(p=> p.IsActive).Select(p => new ProductViewModel()
-                {
-                    Id = p.Id,
-                    Name = p.Name,                    
-                    Price = p.Price,
-                    CategoryId = p.Category.Id,
-                    ProductImages = p.ProductImages.Count > 0 ? p.ProductImages.Select(pi => new ProductImageViewModel()
-                    {
-                        Id = pi.Id,
-                        ImagePath = pi.ImagePath,
-                        Order = pi.Order
-                    }).OrderBy(x=> x.Order).ThenBy(x => x.ImagePath).ToList() : _productImageService.GetProductImages(p.Id)
-                }).ToList()
+                Products = _productService.GetProducts()!.Where(p => p.CategoryId == x.Id).ToList()
 
-            }).OrderBy(x => x.Name).ToList();
+            }).OrderBy(x => x.Title).ToList();
         }
 
         public CategoryViewModel GetCategory(Guid id)
         {
-            var category = GetList().Where(x => x.Id == id && x.IsActive).Include(x => x.Products!).FirstOrDefault();
+            var category = Get(id);
             if (category == null)
             {
                 return new CategoryViewModel();
-            }           
+            }
 
             return new CategoryViewModel()
             {
                 Id = category.Id,
-                Name = category.Name,
+                Title = category.Title,
                 ImgPath = category.ImgPath,
-                Products = category.Products!.Where(p=> p.IsActive).Select(p => new ProductViewModel()
-                {
-                    Id = p.Id,
-                    Name = p.Name,                    
-                    Price = p.Price,
-                    CategoryId = p.Category.Id,
-                    ProductImages = p.ProductImages.Count > 0 ? p.ProductImages.Select(pi => new ProductImageViewModel()
-                    {                       
-                        ImagePath = pi.ImagePath,                        
-                    }).OrderBy(x=> x.Order).ThenBy(x=> x.ImagePath).ToList() : _productImageService.GetProductImages(p.Id),                   
-                }).ToList()
+                Products = _productService.GetProducts().Where(p => p.CategoryId == category.Id).ToList()
             };
 
         }

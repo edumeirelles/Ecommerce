@@ -6,7 +6,7 @@ namespace DAL.Models
     {
         [Required]
         [StringLength(100)]
-        public string Name { get; set; }
+        public string Title { get; set; }
         [StringLength(3000)]
         public string? FullDescription { get; set; }
         [StringLength(500)]

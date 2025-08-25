@@ -1,0 +1,22 @@
+﻿@model DAL.ViewModels.ProductViewModel
+
+<h1>@Html.Raw(Model.Title)</h1>
+
+<form asp-action="EditProduct" enctype="multipart/form-data">
+    <div class="row align-items-center my-3">
+        <div class="col-2">
+            <label class="col-form-label" asp-for="Title"></label>
+        </div>
+        <div class="col">
+            <input class="form-control" type="text" asp-for="Title" />
+        </div>
+    </div>
+    <div class="row align-items-center mb-3">
+        <div class="col-2">
+            <label class="col-form-label" asp-for="FullDescription"></label>
+        </div>
+        <div class="col">
+            <textarea class="form-control" asp-for="FullDescription" rows="10"></textarea>
+        </div>
+    </div>
+</form>

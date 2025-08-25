@@ -15,12 +15,12 @@ namespace DAL.Services
                 Id = x.Id,
                 FullDescription = x.FullDescription ?? string.Empty,                
                 SmallDescription = x.SmallDescription ?? string.Empty,
-                Name = x.Name,
+                Title = x.Title,
                 Details = x.Details ?? new Dictionary<string, object>(),
                 Price = x.Price,
                 Stock = x.Stock,
                 DateAdded = x.DateAdded,
-                CategoryId = x.Category.Id,
+                CategoryId = x.CategoryId,
                 ProductImages = _productImageService.GetProductImages(x.Id)
 
             }).ToList();
@@ -28,7 +28,7 @@ namespace DAL.Services
 
         public ProductViewModel GetProduct(Guid id)
         {
-            var product = GetList().Where(x => x.Id == id && x.IsActive).Include(x=> x.Category).FirstOrDefault();
+            var product = Get(id);
             if (product == null)
             {
                 return new ProductViewModel();
@@ -38,12 +38,12 @@ namespace DAL.Services
                 Id = product.Id,
                 FullDescription = product.FullDescription ?? string.Empty,         
                 SmallDescription = product.SmallDescription ?? string.Empty,
-                Name = product.Name,
-                Details = product.Details ?? new Dictionary<string, object>(),
+                Title = product.Title,
+                Details = product.Details ?? [],
                 Price = product.Price,
                 Stock = product.Stock,
                 DateAdded = product.DateAdded, 
-                CategoryId = product.Category.Id,
+                CategoryId = product.CategoryId,
                 ProductImages = _productImageService.GetProductImages(product.Id)
             };
         }          
@@ -53,7 +53,7 @@ namespace DAL.Services
             var product = new Product()
             {
                 Id = Guid.NewGuid(),
-                Name = productViewModel.Name ?? string.Empty,
+                Title = productViewModel.Title ?? string.Empty,
                 FullDescription = productViewModel.FullDescription ?? string.Empty,
                 SmallDescription = productViewModel.SmallDescription ?? string.Empty,
                 Details = productViewModel.Details ?? [],
@@ -72,7 +72,7 @@ namespace DAL.Services
     {
         public List<ProductImageViewModel> GetProductImages(Guid productId)
         {
-            var imagesList = GetList().Where(x => x.ProductId == productId).ToList();
+            var imagesList = GetList().Where(x => x.ProductId == productId).OrderBy(x=> x.Order).ToList();
 
             return imagesList.Count > 0 ? [.. imagesList.Select(x=> new ProductImageViewModel()
             {

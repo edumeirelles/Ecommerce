@@ -95,7 +95,7 @@
                                         <figure class="product-media">
                                             <span class="product-label label-new">New</span>
                                             <a href="@Url.Action("Product", new { id = i.Id })">
-                                                <img src="@Url.Content(i.ProductImages!.FirstOrDefault()!.ImagePath!)" alt="@i.Name" class="product-image">
+                                                <img src="@Url.Content(i.ProductImages!.FirstOrDefault()!.ImagePath!)" alt="@i.Title" class="product-image">
                                             </a>
 
                                             <div class="product-action-vertical">
@@ -113,7 +113,7 @@
                                             <div class="product-cat">
                                                 <a href="#">Women</a>
                                             </div><!-- End .product-cat -->
-                                            <h3 class="product-title"><a href="product.html">@Html.Raw(i.Name)</a></h3><!-- End .product-title -->
+                                            <h3 class="product-title"><a href="product.html">@Html.Raw(i.Title)</a></h3><!-- End .product-title -->
                                             <div class="product-price">
                                                 @((NumberFormatInfo.CurrentInfo.CurrencySymbol + " " + Html.Raw(i.Price.ToString("0.00", CultureInfo.CurrentCulture))))
                                             </div><!-- End .product-price -->
@@ -188,7 +188,7 @@
                                             <div class="filter-item">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input" id="@i.Id">
-                                                    <label class="custom-control-label" for="@i.Id">@Html.Raw(i.Name)</label>
+                                                    <label class="custom-control-label" for="@i.Id">@Html.Raw(i.Title)</label>
                                                 </div>
                                                 <span class="item-count">@i.Products?.Count</span>
                                             </div>

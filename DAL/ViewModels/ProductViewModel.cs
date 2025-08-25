@@ -1,8 +1,13 @@
-﻿namespace DAL.ViewModels
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace DAL.ViewModels
 {
     public class ProductViewModel : EntityBaseViewModel
-    {       
-        public string? Name { get; set; }
+    {
+        [Display(Name = "Título")]
+        public string? Title { get; set; }
+        [Display(Name = "Descrição Completa")]
         public string? FullDescription { get; set; }
         public string? SmallDescription { get; set; }
         public double Price { get; set; } 

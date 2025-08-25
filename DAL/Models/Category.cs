@@ -2,7 +2,7 @@
 {
     public class Category : EntityBase
     {
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string ImgPath { get; set; }
         public bool IsActive { get; set; }
 
