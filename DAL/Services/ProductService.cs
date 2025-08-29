@@ -16,7 +16,11 @@ namespace DAL.Services
                 FullDescription = x.FullDescription ?? string.Empty,                
                 SmallDescription = x.SmallDescription ?? string.Empty,
                 Title = x.Title,
-                Details = x.Details ?? new Dictionary<string, object>(),
+                Details = x.Details?.Select(x=> new DetailsViewModel()
+                {
+                    Key = x.Key ?? string.Empty,
+                    Value = x.Value.ToString() ?? string.Empty
+                }).ToList() ?? [],
                 Price = x.Price,
                 Stock = x.Stock,
                 DateAdded = x.DateAdded,
@@ -39,7 +43,11 @@ namespace DAL.Services
                 FullDescription = product.FullDescription ?? string.Empty,         
                 SmallDescription = product.SmallDescription ?? string.Empty,
                 Title = product.Title,
-                Details = product.Details ?? [],
+                Details = product.Details?.Select(x=> new DetailsViewModel()
+                {
+                    Key = x.Key ?? string.Empty,
+                    Value = x.Value.ToString() ?? string.Empty
+                }).ToList() ?? [],
                 Price = product.Price,
                 Stock = product.Stock,
                 DateAdded = product.DateAdded, 
@@ -56,7 +64,7 @@ namespace DAL.Services
                 Title = productViewModel.Title ?? string.Empty,
                 FullDescription = productViewModel.FullDescription ?? string.Empty,
                 SmallDescription = productViewModel.SmallDescription ?? string.Empty,
-                Details = productViewModel.Details ?? [],
+                Details = productViewModel.Details?.ToDictionary(d => d.Key, d => (object)d.Value) ?? [],
                 Price = productViewModel.Price,
                 Stock = productViewModel.Stock,
                 DateAdded = DateTime.UtcNow,
@@ -65,6 +73,29 @@ namespace DAL.Services
             };
 
             return Add(product);
+        }
+
+        public bool UpdateProduct(ProductViewModel viewModel)
+        {
+            var productToUpdate = Get(viewModel.Id);
+
+            productToUpdate.Title = viewModel.Title ?? string.Empty;
+            productToUpdate.FullDescription = viewModel.FullDescription;
+            productToUpdate.SmallDescription = viewModel.SmallDescription;
+            productToUpdate.Details = viewModel.Details?.ToDictionary(d=> d.Key, d=> (object)d.Value) ?? [];
+            productToUpdate.Price = viewModel.Price;
+            productToUpdate.Stock = viewModel.Stock;
+
+            try
+            {
+                Update(productToUpdate);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
     
@@ -81,6 +112,6 @@ namespace DAL.Services
                 Order = x.Order
             })] : [new ProductImageViewModel() { ImagePath = "~/images/products/No_Image_Available.jpg" }];
         }
-
     }
+
 }

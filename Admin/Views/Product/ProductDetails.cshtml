@@ -3,7 +3,8 @@
 <h1>@Html.Raw(Model.Title)</h1>
 
 <form asp-action="EditProduct" enctype="multipart/form-data">
-    <div class="row align-items-center my-3">
+    <input type="hidden" asp-for="Id" />
+    <div class="row my-3">
         <div class="col-2">
             <label class="col-form-label" asp-for="Title"></label>
         </div>
@@ -11,7 +12,7 @@
             <input class="form-control" type="text" asp-for="Title" />
         </div>
     </div>
-    <div class="row align-items-center mb-3">
+    <div class="row mb-3">
         <div class="col-2">
             <label class="col-form-label" asp-for="FullDescription"></label>
         </div>
@@ -19,4 +20,71 @@
             <textarea class="form-control" asp-for="FullDescription" rows="10"></textarea>
         </div>
     </div>
+    <div class="row mb-3">
+        <div class="col-2">
+            <label class="col-form-label" asp-for="SmallDescription"></label>
+        </div>
+        <div class="col">
+            <textarea class="form-control" asp-for="SmallDescription" rows="5"></textarea>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2">
+            <label class="col-form-label" asp-for="Price"></label>
+        </div>
+        <div class="col-2">
+            <input class="form-control" asp-for="Price" type="number" step="any" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2">
+            <label class="col-form-label" asp-for="Details"></label>
+        </div>
+
+        <div class="col">            
+            <div class="row mb-2">
+                <div class="align-items-center d-inline-flex text-center justify-content-end">
+                    <div class="col-1">
+                    </div>
+                    @foreach(var i in Model.Details.Take(1))
+                    {
+                        <div class="col">
+                            <label class="small" asp-for="@i.Key"></label>
+                        </div>
+                        <div class="col">
+                            <label class="small" asp-for="@i.Value"></label>
+                        </div>
+                    }
+                </div>
+            </div>
+            @for (var i = 0; i < Model.Details.Count; i++)
+            {
+                <div class="row mb-1">
+                    <div class="align-items-center d-inline-flex">
+                        <span class="col-1">@(i + 1).</span>
+                        @Html.EditorFor(x => x.Details[i].Key, new { htmlAttributes = new { @class = "form-control me-1" } })
+                        @Html.EditorFor(x => x.Details[i].Value, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+    <div class="row d-flex justify-content-center">
+        <div class="col-2">
+            <a href="@Url.Action("Index", "Product")" class="btn btn-outline-danger">Voltar</a>
+        </div>
+        <div class="col-2">
+            <input type="submit" value="Salvar" class="btn btn-outline-primary" />
+            @* <button type="button" class="btn btn-outline-primary">Salvar</button> *@
+        </div>
+    </div>
 </form>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+        });
+    </script>
+}
