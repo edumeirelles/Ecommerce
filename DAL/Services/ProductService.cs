@@ -64,7 +64,12 @@ namespace DAL.Services
                 Title = productViewModel.Title ?? string.Empty,
                 FullDescription = productViewModel.FullDescription ?? string.Empty,
                 SmallDescription = productViewModel.SmallDescription ?? string.Empty,
-                Details = productViewModel.Details?.ToDictionary(d => d.Key, d => (object)d.Value) ?? [],
+                Details = productViewModel.Details?
+                    .Where(d => !string.IsNullOrEmpty(d.Key))
+                    .ToDictionary(
+                        d => d.Key ?? string.Empty, 
+                        d => (object?)d.Value ?? string.Empty
+                    ) ?? [],
                 Price = productViewModel.Price,
                 Stock = productViewModel.Stock,
                 DateAdded = DateTime.UtcNow,
@@ -81,8 +86,13 @@ namespace DAL.Services
 
             productToUpdate.Title = viewModel.Title ?? string.Empty;
             productToUpdate.FullDescription = viewModel.FullDescription;
-            productToUpdate.SmallDescription = viewModel.SmallDescription;
-            productToUpdate.Details = viewModel.Details?.ToDictionary(d=> d.Key, d=> (object)d.Value) ?? [];
+            productToUpdate.SmallDescription = viewModel.SmallDescription;            
+            productToUpdate.Details = viewModel.Details?
+                .Where(d => !string.IsNullOrEmpty(d.Key))
+                .ToDictionary(
+                    d => d.Key ?? string.Empty, 
+                    d => (object?)d.Value ?? string.Empty
+                ) ?? [];
             productToUpdate.Price = viewModel.Price;
             productToUpdate.Stock = viewModel.Stock;
 

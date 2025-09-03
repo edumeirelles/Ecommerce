@@ -11,7 +11,7 @@ namespace Admin.Controllers
             var viewModel = _productService.GetProducts();
             return View(viewModel);
         }
-
+        [HttpGet]
         public IActionResult ProductDetails(Guid id)
         {
             var viewModel = _productService.GetProduct(id);
@@ -33,5 +33,7 @@ namespace Admin.Controllers
             TempData["SuccessMessage"] = $"Produto {viewModel.Title} - ID: {viewModel.Id} editado com sucesso";
             return RedirectToAction("ProductDetails", new {id = viewModel.Id});
         }
+
+
     }
 }

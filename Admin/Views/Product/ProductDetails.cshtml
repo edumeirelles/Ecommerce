@@ -41,32 +41,50 @@
             <label class="col-form-label" asp-for="Details"></label>
         </div>
 
-        <div class="col">            
-            <div class="row mb-2">
-                <div class="align-items-center d-inline-flex text-center justify-content-end">
+        <div class="col-10 align-items-center d-inline-block" id="div-detail-row">
+            @if(Model.Details?.Count > 0)
+            {
+                <div class="row mb-2 text-center" id="detail-header">
+
                     <div class="col-1">
                     </div>
-                    @foreach(var i in Model.Details.Take(1))
-                    {
-                        <div class="col">
-                            <label class="small" asp-for="@i.Key"></label>
-                        </div>
-                        <div class="col">
-                            <label class="small" asp-for="@i.Value"></label>
-                        </div>
-                    }
-                </div>
-            </div>
-            @for (var i = 0; i < Model.Details.Count; i++)
-            {
-                <div class="row mb-1">
-                    <div class="align-items-center d-inline-flex">
-                        <span class="col-1">@(i + 1).</span>
-                        @Html.EditorFor(x => x.Details[i].Key, new { htmlAttributes = new { @class = "form-control me-1" } })
-                        @Html.EditorFor(x => x.Details[i].Value, new { htmlAttributes = new { @class = "form-control" } })
+                    <div class="col-5">
+                        <label class="small">Título do detalhe</label>
                     </div>
+                    <div class="col-5">
+                        <label class="small">Descrição</label>
+                    </div>
+                    <div class="col-1">
+                    </div>
+
                 </div>
+                @for (var i = 0; i < Model.Details.Count; i++)
+                {
+                    <div class="row mb-3 detail-row">
+                        <div class="col-1">
+                            <span class="row-number">@(i + 1).</span>
+                        </div>
+                        <div class="col-5">
+                            @Html.EditorFor(x => x.Details[i].Key, new { htmlAttributes = new { @class = "form-control me-1 row-key" } })
+                        </div>
+                        <div class="col-5">
+                            @Html.EditorFor(x => x.Details[i].Value, new { htmlAttributes = new { @class = "form-control me-1 row-value" } })
+                        </div>
+                        <div class="col-1 remove-detail-row">
+                            <button type="button" class="btn btn-lg"><i class="m-2 ti ti-trash"></i></button>
+                        </div>
+                    </div>
+                }
             }
+           
+            
+            <div class="row" id="add-new-detail-row">
+                <div class="col-3">
+                    <button type="button" class="btn btn-outline-primary"  onclick="addDetail()">Adicionar detalhe</button>
+                </div>
+
+            </div>
+
         </div>
 
     </div>
@@ -82,9 +100,74 @@
 </form>
 
 @section Scripts {
-    <script type="text/javascript">
-        $(document).ready(function(){
+    <script type="text/javascript">        
 
+        $(document).ready(function(){
+            $("form").on("click",".remove-detail-row", function(){                
+                $(this).parent().remove();
+                var detailRowIndex = $(".detail-row").length;
+                if(detailRowIndex == 0){
+                    console.log("bla")
+                    $("#detail-header").remove();
+                };
+                updateRowsIndexes();
+            });
         });
+
+        function addDetail(){
+            var detailRowIndex = $(".detail-row").length;
+
+            var newDetailRowHtml = `                                   
+                                    <div class="row mb-3 detail-row ">
+                                        <div class="col-1">
+                                            <span class="row-number">${detailRowIndex + 1}.</span>
+                                        </div>
+                                        <div class="col-5">
+                                            <input class="form-control me-1 row-key" name="Details[${detailRowIndex}].Key" type="text" value="" />
+                                        </div>
+                                        <div class="col-5">
+                                            <input class="form-control me-1 row-value" name="Details[${detailRowIndex}].Value" type="text" value="" />
+                                        </div>
+                                        <div class="col-1 remove-detail-row">
+                                            <button type="button" class="btn btn-lg"><i class="m-2 ti ti-trash"></i></button>
+                                        </div>
+                                    </div>`;
+            
+            if(detailRowIndex > 0){
+                $(".detail-row").last().after(newDetailRowHtml);
+            } else{
+                var detailRowHeaderHtml = `
+                                           <div class="row mb-2 text-center" id="detail-header">
+                                               <div class="col-1">
+                                               </div>
+                                               <div class="col-5">
+                                                   <label class="small">Título do detalhe</label>
+                                               </div>
+                                               <div class="col-5">
+                                                   <label class="small">Descrição</label>
+                                               </div>
+                                               <div class="col-1">
+                                               </div>
+                                           </div>`;
+
+                var newDetailRowHtml = detailRowHeaderHtml += newDetailRowHtml;
+                $("#add-new-detail-row").prepend(newDetailRowHtml);
+            }
+
+        };
+
+        function updateRowsIndexes(){
+            var detailRowIndex = 0;
+
+            $.each($(".detail-row"), function(){
+                $(this).find(".row-number").html(`${detailRowIndex + 1}.`)
+                $(this).find(".row-key").attr("name", `Details[${detailRowIndex}].Key`)
+                $(this).find(".row-value").attr("name", `Details[${detailRowIndex}].Value`)
+
+                detailRowIndex++;
+            });
+            
+           
+        }
     </script>
 }
