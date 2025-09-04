@@ -1,9 +1,39 @@
 ﻿@model DAL.ViewModels.ProductViewModel
 
-<h1>@Html.Raw(Model.Title)</h1>
+<h1 class="mb-5">@Html.Raw(Model.Title)</h1>
 
 <form asp-action="EditProduct" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
+    <div class="row mb-3">
+        <div class="col-2">
+            <label class="col-form-label" asp-for="ProductImages"></label>
+        </div>
+        <div class="col">
+            <div class="row">
+                @for (var i = 0; i < Model.ProductImages.Count(); i++)
+                {
+                    @Html.HiddenFor(x=> x.ProductImages[i].Id)
+                    <div class="col-2 ">
+                        <div class="card w-100">
+                            <div class="card-body p-0">
+                                <img src="@Url.Content(Model.ProductImages[i].ImagePath)" class="product-image" />
+                            </div>
+                            <div class="card-footer d-inline-flex" style="padding:10px">
+                                <label class="col-form-label me-1"><small>Ordem:</small></label>
+                                @Html.EditorFor(x => x.ProductImages[i].Order, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="row" id="add-new-image">
+                <div class="col-3">
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addNewImage()">Adicionar imagem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row my-3">
         <div class="col-2">
             <label class="col-form-label" asp-for="Title"></label>
@@ -12,6 +42,7 @@
             <input class="form-control" type="text" asp-for="Title" />
         </div>
     </div>
+
     <div class="row mb-3">
         <div class="col-2">
             <label class="col-form-label" asp-for="FullDescription"></label>
@@ -41,8 +72,8 @@
             <label class="col-form-label" asp-for="Details"></label>
         </div>
 
-        <div class="col-10 align-items-center d-inline-block" id="div-detail-row">
-            @if(Model.Details?.Count > 0)
+        <div class="col align-items-center d-inline-block" id="div-detail-row">
+            @if (Model.Details?.Count > 0)
             {
                 <div class="row mb-2 text-center" id="detail-header">
 
@@ -77,33 +108,31 @@
                 }
             }
            
-            
             <div class="row" id="add-new-detail-row">
                 <div class="col-3">
-                    <button type="button" class="btn btn-outline-primary"  onclick="addDetail()">Adicionar detalhe</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addDetail()">Adicionar detalhe</button>
                 </div>
-
             </div>
-
+            <hr />
         </div>
 
     </div>
-    <div class="row d-flex justify-content-center">
-        <div class="col-2">
-            <a href="@Url.Action("Index", "Product")" class="btn btn-outline-danger">Voltar</a>
+    <div class="row">
+        <div class="col-2">            
         </div>
-        <div class="col-2">
-            <input type="submit" value="Salvar" class="btn btn-outline-primary" />
-            @* <button type="button" class="btn btn-outline-primary">Salvar</button> *@
+        <div class="col d-flex  justify-content-evenly">
+            <a href="@Url.Action("Index", "Product")" class="btn btn-outline-danger">Voltar</a>
+            <input type="submit" value="Salvar" class="btn btn-outline-primary" />           
         </div>
     </div>
 </form>
 
 @section Scripts {
-    <script type="text/javascript">        
+    <script type="text/javascript">
+
 
         $(document).ready(function(){
-            $("form").on("click",".remove-detail-row", function(){                
+            $("form").on("click",".remove-detail-row", function(){
                 $(this).parent().remove();
                 var detailRowIndex = $(".detail-row").length;
                 if(detailRowIndex == 0){
@@ -117,7 +146,7 @@
         function addDetail(){
             var detailRowIndex = $(".detail-row").length;
 
-            var newDetailRowHtml = `                                   
+            var newDetailRowHtml = `
                                     <div class="row mb-3 detail-row ">
                                         <div class="col-1">
                                             <span class="row-number">${detailRowIndex + 1}.</span>
@@ -132,7 +161,7 @@
                                             <button type="button" class="btn btn-lg"><i class="m-2 ti ti-trash"></i></button>
                                         </div>
                                     </div>`;
-            
+
             if(detailRowIndex > 0){
                 $(".detail-row").last().after(newDetailRowHtml);
             } else{
@@ -166,8 +195,8 @@
 
                 detailRowIndex++;
             });
-            
-           
+
+
         }
     </script>
 }

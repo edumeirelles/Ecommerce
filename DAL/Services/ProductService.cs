@@ -95,6 +95,7 @@ namespace DAL.Services
                 ) ?? [];
             productToUpdate.Price = viewModel.Price;
             productToUpdate.Stock = viewModel.Stock;
+            
 
             try
             {
@@ -122,6 +123,25 @@ namespace DAL.Services
                 Order = x.Order
             })] : [new ProductImageViewModel() { ImagePath = "~/images/products/No_Image_Available.jpg" }];
         }
+
+        public bool UpdateProductImageOrder(Guid productImageId, int newOrder)
+        {
+            var productImage = Get(productImageId);
+            if (productImage == null)
+            {
+                return false;
+            }
+            productImage.Order = newOrder;
+            try
+            {
+                Update(productImage);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
+        }   
     }
 
 }
