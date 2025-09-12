@@ -33,5 +33,19 @@ body {
 .product-image {
     display: block;
     width: 100%;
-    height: auto
+    height: auto;
+    aspect-ratio:1;
+    object-fit:cover
+}
+
+.message {
+    
+    margin: 0 auto;
+    
+    text-align: center;
+    -webkit-animation: fadeInOut 6s;
+    animation: fadeInOut 6s;
+    z-index: 999;
+    left: 50%;
+    transform: translate(-50%, -50%)
 }

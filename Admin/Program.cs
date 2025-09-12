@@ -1,8 +1,9 @@
 using DAL;
 using DAL.Interfaces;
 using DAL.Services;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +18,18 @@ builder.Services.AddScoped<ISiteConfigService, SiteConfigService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductImageService, ProductImageService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.Configure<FormOptions>(x =>
+{
+    x.ValueLengthLimit = int.MaxValue;
+    x.MultipartBodyLengthLimit = int.MaxValue;
+    x.MemoryBufferThreshold = int.MaxValue;
+    x.MultipartHeadersLengthLimit = int.MaxValue;
 
+});
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = int.MaxValue;
+});
 
 var app = builder.Build();
 

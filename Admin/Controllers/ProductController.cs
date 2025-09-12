@@ -19,8 +19,11 @@ namespace Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditProduct(ProductViewModel viewModel)
-        {
+        [ValidateAntiForgeryToken]
+        [RequestFormLimits(ValueCountLimit = int.MaxValue)]
+       
+        public IActionResult EditProduct([FromForm] ProductViewModel viewModel)
+        {            
             if (!ModelState.IsValid)
             {
                 return View("ProductDetails", new { id = viewModel.Id });
@@ -33,7 +36,5 @@ namespace Admin.Controllers
             TempData["SuccessMessage"] = $"Produto {viewModel.Title} - ID: {viewModel.Id} editado com sucesso";
             return RedirectToAction("ProductDetails", new {id = viewModel.Id});
         }
-
-
     }
 }

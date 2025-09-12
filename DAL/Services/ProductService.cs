@@ -94,8 +94,7 @@ namespace DAL.Services
                     d => (object?)d.Value ?? string.Empty
                 ) ?? [];
             productToUpdate.Price = viewModel.Price;
-            productToUpdate.Stock = viewModel.Stock;
-            
+            productToUpdate.Stock = viewModel.Stock;      
 
             try
             {
@@ -124,14 +123,14 @@ namespace DAL.Services
             })] : [new ProductImageViewModel() { ImagePath = "~/images/products/No_Image_Available.jpg" }];
         }
 
-        public bool UpdateProductImageOrder(Guid productImageId, int newOrder)
+        public bool UpdateProductImage(ProductImageViewModel viewModel)
         {
-            var productImage = Get(productImageId);
+            var productImage = Get(viewModel.Id);
             if (productImage == null)
             {
                 return false;
             }
-            productImage.Order = newOrder;
+            productImage.Order = viewModel.Order;
             try
             {
                 Update(productImage);

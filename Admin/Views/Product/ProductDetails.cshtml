@@ -1,5 +1,16 @@
 ﻿@model DAL.ViewModels.ProductViewModel
 
+<div class="position-fixed message">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <span class="alert alert-success ">@TempData["SuccessMessage"]</span>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <span class="alert alert-danger ">@TempData["ErrorMessage"]</span>
+    }
+</div>
+
 <h1 class="mb-5">@Html.Raw(Model.Title)</h1>
 
 <form asp-action="EditProduct" enctype="multipart/form-data">
@@ -9,12 +20,12 @@
             <label class="col-form-label" asp-for="ProductImages"></label>
         </div>
         <div class="col">
-            <div class="row">
+            <div class="row" id="div-images">
                 @for (var i = 0; i < Model.ProductImages.Count(); i++)
                 {
-                    @Html.HiddenFor(x=> x.ProductImages[i].Id)
+                    @Html.HiddenFor(x => x.ProductImages[i].Id)
                     <div class="col-2 ">
-                        <div class="card w-100">
+                        <div class="card">
                             <div class="card-body p-0">
                                 <img src="@Url.Content(Model.ProductImages[i].ImagePath)" class="product-image" />
                             </div>
@@ -28,7 +39,7 @@
             </div>
             <div class="row" id="add-new-image">
                 <div class="col-3">
-                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="addNewImage()">Adicionar imagem</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="add-new-image">Adicionar imagem</button>
                 </div>
             </div>
         </div>
@@ -65,6 +76,14 @@
         </div>
         <div class="col-2">
             <input class="form-control" asp-for="Price" type="number" step="any" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-2">
+            <label class="col-form-label" asp-for="Stock"></label>
+        </div>
+        <div class="col-2">
+            <input class="form-control" asp-for="Stock" type="number" step="any" />
         </div>
     </div>
     <div class="row mb-3">
@@ -107,7 +126,7 @@
                     </div>
                 }
             }
-           
+
             <div class="row" id="add-new-detail-row">
                 <div class="col-3">
                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="addDetail()">Adicionar detalhe</button>
@@ -118,11 +137,11 @@
 
     </div>
     <div class="row">
-        <div class="col-2">            
+        <div class="col-2">
         </div>
         <div class="col d-flex  justify-content-evenly">
             <a href="@Url.Action("Index", "Product")" class="btn btn-outline-danger">Voltar</a>
-            <input type="submit" value="Salvar" class="btn btn-outline-primary" />           
+            <button type="submit" class="btn btn-outline-primary" id="submit-form">Salvar</button>
         </div>
     </div>
 </form>
@@ -130,6 +149,7 @@
 @section Scripts {
     <script type="text/javascript">
 
+        var currentImagemTempIndex = 0;
 
         $(document).ready(function(){
             $("form").on("click",".remove-detail-row", function(){
@@ -141,7 +161,60 @@
                 };
                 updateRowsIndexes();
             });
+
+            $("#add-new-image").on("click", function(){
+                
+                var tempFileInput = `
+                                     <input type="file" style="display:none;" name="ImageUploadFiles[${currentImagemTempIndex}].ImageUploadFile" class="tempImgUpload image-file-${currentImagemTempIndex}" accept="image/jpg, image/jpeg, image/png, image/gif" />
+                                    `
+                $("form").append(tempFileInput);
+                $("form .image-file-" + currentImagemTempIndex).click();
+                currentImagemTempIndex++;
+            });
+
+            $("form").on("change", ".tempImgUpload", function (e) {
+                var file = this.files[0];
+                var fileType = file["type"];
+                var validImageTypes = ["image/gif", "image/jpeg", "image/png", "image/jpg"];
+                if ($.inArray(fileType, validImageTypes) < 0) {
+                    alert("Formato inválido");
+                    currentImagemTempIndex--;
+                    $(this).remove();
+                } else {
+                    var file = $(this).prop("files")[0];
+                    if (file) {
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            
+                            var previewImgHtml = `
+                                                <div class="col-2 ">
+                                                    <div class="card">
+                                                        <div class="card-body p-0">
+                                                            <img src="${reader.result}" class="product-image" />
+                                                        </div>
+                                                        <div class="card-footer d-inline-flex" style="padding:10px">
+                                                            <label class="col-form-label me-1"><small>Ordem:</small></label>
+                                                            <input type="text" name="ImageUploadFiles[${currentImagemTempIndex - 1}].Order" class="form-control" value="" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                `;
+                            $("#div-images").append(previewImgHtml);
+                            
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+
+                    }
+                }
+            });
+            setTimeout(function(){
+                $(".message").fadeOut();
+            }, 2500);
         });
+
+
+
 
         function addDetail(){
             var detailRowIndex = $(".detail-row").length;
@@ -182,7 +255,6 @@
                 var newDetailRowHtml = detailRowHeaderHtml += newDetailRowHtml;
                 $("#add-new-detail-row").prepend(newDetailRowHtml);
             }
-
         };
 
         function updateRowsIndexes(){
@@ -195,8 +267,8 @@
 
                 detailRowIndex++;
             });
-
-
         }
+     
+
     </script>
 }

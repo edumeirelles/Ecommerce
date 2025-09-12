@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace DAL.ViewModels
@@ -20,6 +21,8 @@ namespace DAL.ViewModels
         public DateTime DateAdded { get; set; }
         public Guid CategoryId { get; set; }
         public List<ProductImageViewModel> ProductImages { get; set; } = [];
+
+        public List<ImageUploadViewModel>? ImageUploadFiles { get; set; }
     }
 
     public class DetailsViewModel
@@ -35,5 +38,10 @@ namespace DAL.ViewModels
         public string? ImagePath { get; set; }
         public int? Order { get; set; }
 
+    }
+    public class ImageUploadViewModel
+    {
+        public IFormFile? ImageUploadFile { get; set; }
+        public int Order { get; set; }
     }
 }
