@@ -1,6 +1,7 @@
 ﻿using DAL.Interfaces;
 using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Admin.Controllers
 {
@@ -13,7 +14,7 @@ namespace Admin.Controllers
         }
         [HttpGet]
         public IActionResult ProductDetails(Guid id)
-        {
+        {            
             var viewModel = _productService.GetProduct(id);
             return View(viewModel);
         }
@@ -22,8 +23,10 @@ namespace Admin.Controllers
         [ValidateAntiForgeryToken]
         [RequestFormLimits(ValueCountLimit = int.MaxValue)]
        
-        public IActionResult EditProduct([FromForm] ProductViewModel viewModel)
-        {            
+        public IActionResult EditProduct(ProductViewModel viewModel)
+        {
+            
+
             if (!ModelState.IsValid)
             {
                 return View("ProductDetails", new { id = viewModel.Id });

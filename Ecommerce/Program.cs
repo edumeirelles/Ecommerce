@@ -16,7 +16,7 @@ builder.Services.AddTransient<ISiteConfigService, SiteConfigService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IProductImageService, ProductImageService>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
-
+builder.Services.AddTransient(x => new Lazy<ICategoryService>(() => x.GetRequiredService<ICategoryService>()));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

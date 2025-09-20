@@ -8,10 +8,7 @@ namespace DAL.Services
         private readonly Context _db;        
         public BaseService()
         {
-            if (_db == null)
-            {
-                _db = new Context();
-            }
+            _db ??= new Context();
         }
         public T Get(Guid id)
         {

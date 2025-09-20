@@ -1,5 +1,6 @@
 ﻿using DAL.Models;
 using DAL.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace DAL.Interfaces
 {
@@ -12,6 +13,7 @@ namespace DAL.Interfaces
     }
     public interface IProductImageService : IBaseService<ProductImage>, IDisposable
     {
-        List<ProductImageViewModel> GetProductImages(Guid productId);        
+        List<ProductImageViewModel> GetProductImages(Guid productId);
+        Task<string> SaveFile(IFormFile file, string fileName);
     }
 }

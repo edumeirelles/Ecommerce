@@ -1,13 +1,19 @@
-﻿using DAL.Models;
-using DAL.Interfaces;
+﻿using DAL.Interfaces;
+using DAL.Models;
 using DAL.ViewModels;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace DAL.Services
 {
-    public class ProductService(IProductImageService productImageService) : BaseService<Product>, IProductService
+    public class ProductService(IProductImageService productImageService, Lazy<ICategoryService> categoryService) : BaseService<Product>, IProductService
     {   
         private readonly IProductImageService _productImageService = productImageService;
+        private readonly Lazy<ICategoryService> _categoryService = categoryService;
+
         public List<ProductViewModel> GetProducts()
         {
             return GetList().Where(x=> x.IsActive).Select(x => new ProductViewModel()
@@ -35,7 +41,14 @@ namespace DAL.Services
             var product = Get(id);
             if (product == null)
             {
-                return new ProductViewModel();
+                return new ProductViewModel() 
+                { 
+                    Categorias = [.. _categoryService.Value.GetCategories().Select(x=> new SelectListItem()
+                {
+                    Text = x.Title,
+                    Value = x.Id.ToString()
+                })],
+                };
             }
             return new ProductViewModel()
             {
@@ -51,6 +64,11 @@ namespace DAL.Services
                 Price = product.Price,
                 Stock = product.Stock,
                 DateAdded = product.DateAdded, 
+                Categorias = [.. _categoryService.Value.GetCategories().Select(x=> new SelectListItem()
+                {
+                    Text = x.Title,
+                    Value = x.Id.ToString()
+                })],
                 CategoryId = product.CategoryId,
                 ProductImages = _productImageService.GetProductImages(product.Id)
             };
@@ -94,11 +112,44 @@ namespace DAL.Services
                     d => (object?)d.Value ?? string.Empty
                 ) ?? [];
             productToUpdate.Price = viewModel.Price;
-            productToUpdate.Stock = viewModel.Stock;      
+            productToUpdate.Stock = viewModel.Stock;
+            productToUpdate.ProductImages = _productImageService.GetList().Where(x=> x.ProductId == viewModel.Id).ToList();
+            productToUpdate.CategoryId = viewModel.CategoryId;
+            if (productToUpdate.ProductImages.Count > 0)
+            {
+                foreach (var i in viewModel.ProductImages)
+                {
+                    var image = productToUpdate.ProductImages.FirstOrDefault(x => x.Id == i.Id);
+                    if (image != null)
+                    {
+                        image.Order = i.Order;
+                    }
+                }
+            }           
 
             try
             {
+                if(viewModel.ImageUploadFiles != null && viewModel.ImageUploadFiles.Count > 0)
+                {
+                    foreach (var file in viewModel.ImageUploadFiles)
+                    {
+                        if (file.ImageUploadFile != null && file.ImageUploadFile.Length > 0)
+                        {
+                            var name = $"{Guid.NewGuid()}{Path.GetExtension(file.ImageUploadFile.FileName)}";
+                            var imagePath = _productImageService.SaveFile(file.ImageUploadFile, name).Result;
+                            var productImage = new ProductImage()
+                            {
+                                Id = Guid.NewGuid(),
+                                ProductId = productToUpdate.Id,
+                                ImagePath = imagePath,
+                                Order = file.Order ?? 0
+                            };
+                            _productImageService.Add(productImage);
+                        }
+                    }
+                }
                 Update(productToUpdate);
+
             }
             catch (Exception e)
             {
@@ -109,38 +160,41 @@ namespace DAL.Services
         }
     }
     
-    public class ProductImageService : BaseService<ProductImage>, IProductImageService
+    public class ProductImageService(IWebHostEnvironment webHostEnvironment) : BaseService<ProductImage>, IProductImageService
     {
+        private readonly IWebHostEnvironment _env = webHostEnvironment;
         public List<ProductImageViewModel> GetProductImages(Guid productId)
         {
-            var imagesList = GetList().Where(x => x.ProductId == productId).OrderBy(x=> x.Order).ToList();
+            var imagesList = GetList().Where(x => x.ProductId == productId && !string.IsNullOrEmpty(x.ImagePath)).OrderBy(x=> x.Order).ToList();
 
             return imagesList.Count > 0 ? [.. imagesList.Select(x=> new ProductImageViewModel()
             {
                 Id = x.Id,
                 ImagePath = x.ImagePath,
                 Order = x.Order
-            })] : [new ProductImageViewModel() { ImagePath = "~/images/products/No_Image_Available.jpg" }];
+            })] : [];
         }
-
-        public bool UpdateProductImage(ProductImageViewModel viewModel)
+        
+        
+        public async Task<string> SaveFile(IFormFile file, string name)
         {
-            var productImage = Get(viewModel.Id);
-            if (productImage == null)
+            var path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @".\..\Ecommerce\wwwroot\images\products"));
+            var relativePath = "~/images/products/";
+
+            
+            if (!Directory.Exists(path))
             {
-                return false;
+                Directory.CreateDirectory(path);
             }
-            productImage.Order = viewModel.Order;
-            try
+
+            string filename = name.Trim().Replace(" ", "");
+            using (var fileStream = new FileStream(Path.Combine(path, filename), FileMode.Create))
             {
-                Update(productImage);
+                await file.CopyToAsync(fileStream);
             }
-            catch (Exception e)
-            {
-                return false;
-            }
-            return true;
-        }   
+
+            return Path.Combine(relativePath + filename);
+        }
     }
 
 }

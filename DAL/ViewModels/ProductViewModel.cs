@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -20,6 +21,8 @@ namespace DAL.ViewModels
         public List<DetailsViewModel>? Details { get; set; }
         public DateTime DateAdded { get; set; }
         public Guid CategoryId { get; set; }
+        [Display(Name = "Categoria")]
+        public List<SelectListItem> Categorias { get; set; } = [];
         public List<ProductImageViewModel> ProductImages { get; set; } = [];
 
         public List<ImageUploadViewModel>? ImageUploadFiles { get; set; }
@@ -34,7 +37,7 @@ namespace DAL.ViewModels
     }
 
     public class ProductImageViewModel : EntityBaseViewModel
-    {
+    {        
         public string? ImagePath { get; set; }
         public int? Order { get; set; }
 
@@ -42,6 +45,6 @@ namespace DAL.ViewModels
     public class ImageUploadViewModel
     {
         public IFormFile? ImageUploadFile { get; set; }
-        public int Order { get; set; }
+        public int? Order { get; set; }
     }
 }

@@ -18,6 +18,7 @@ builder.Services.AddScoped<ISiteConfigService, SiteConfigService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductImageService, ProductImageService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddTransient(x=> new Lazy<ICategoryService>(()=> x.GetRequiredService<ICategoryService>()));
 builder.Services.Configure<FormOptions>(x =>
 {
     x.ValueLengthLimit = int.MaxValue;
@@ -43,22 +44,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
-if (!app.Environment.IsDevelopment())
+app.UseStaticFiles(new StaticFileOptions()
 {
-    app.UseStaticFiles(new StaticFileOptions()
-    {
-        FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), @"../wwwroot/"))
-    });
-}
-else
-{
-    app.UseStaticFiles(new StaticFileOptions()
-    {
-        FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), @"./../Ecommerce/wwwroot/"))
-    });
-}
+    FileProvider = new PhysicalFileProvider(
+    Path.Combine(Directory.GetCurrentDirectory(), "..", "Ecommerce", "wwwroot" )),
+});
+
 app.UseHttpsRedirection();
 app.UseRouting();
 

@@ -11,11 +11,22 @@
     }
 </div>
 
-<h1 class="mb-5">@Html.Raw(Model.Title)</h1>
+<h1 class="mb-5">@Html.Raw(Model.Title ?? "Adicionar Produto")</h1>
 
 <form asp-action="EditProduct" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
+    
     <div class="row mb-3">
+        <div class="col-2">
+            <label class="col-form-label" asp-for="Categorias"></label>
+        </div>
+        <div class="col-2">
+            <select class="form-select" asp-items="Model.Categorias" asp-for="CategoryId">
+                <option>Selecione...</option>
+            </select>
+        </div>
+    </div>
+    <div class="row my-3">
         <div class="col-2">
             <label class="col-form-label" asp-for="ProductImages"></label>
         </div>
@@ -185,7 +196,7 @@
                     if (file) {
                         var reader = new FileReader();
                         reader.onload = function () {
-                            
+                            var imgCount = $(".product-image").length;
                             var previewImgHtml = `
                                                 <div class="col-2 ">
                                                     <div class="card">
@@ -194,7 +205,7 @@
                                                         </div>
                                                         <div class="card-footer d-inline-flex" style="padding:10px">
                                                             <label class="col-form-label me-1"><small>Ordem:</small></label>
-                                                            <input type="text" name="ImageUploadFiles[${currentImagemTempIndex - 1}].Order" class="form-control" value="" />
+                                                            <input type="number" name="ImageUploadFiles[${currentImagemTempIndex - 1}].Order" value="${imgCount + 1}" class="form-control"/>
                                                         </div>
                                                     </div>
                                                 </div>
