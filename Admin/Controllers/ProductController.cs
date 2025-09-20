@@ -23,21 +23,20 @@ namespace Admin.Controllers
         [ValidateAntiForgeryToken]
         [RequestFormLimits(ValueCountLimit = int.MaxValue)]
        
-        public IActionResult EditProduct(ProductViewModel viewModel)
+        public IActionResult ProductDetails(ProductViewModel viewModel)
         {
-            
-
             if (!ModelState.IsValid)
             {
                 return View("ProductDetails", new { id = viewModel.Id });
             }
-            if (!_productService.UpdateProduct(viewModel))
+            var productId = _productService.AddOrUpdateProduct(viewModel);
+            if (productId == Guid.Empty)
             {
-                TempData["ErrorMessage"] = "Error updating product.";
-                return View("ProductDetails", new { id = viewModel.Id });
+                TempData["ErrorMessage"] = viewModel.Id == Guid.Empty ? "Error creating product." : "Error updating product.";
+                return View("ProductDetails");
             }
-            TempData["SuccessMessage"] = $"Produto {viewModel.Title} - ID: {viewModel.Id} editado com sucesso";
-            return RedirectToAction("ProductDetails", new {id = viewModel.Id});
+            TempData["SuccessMessage"] = $"Produto {viewModel.Title} - ID: {productId} {(viewModel.Id == Guid.Empty ? "criado" : "editado")} com sucesso";
+            return RedirectToAction("ProductDetails", new {id = productId});
         }
     }
 }

@@ -10,19 +10,19 @@ using System.IO;
 namespace DAL.Services
 {
     public class ProductService(IProductImageService productImageService, Lazy<ICategoryService> categoryService) : BaseService<Product>, IProductService
-    {   
+    {
         private readonly IProductImageService _productImageService = productImageService;
         private readonly Lazy<ICategoryService> _categoryService = categoryService;
 
         public List<ProductViewModel> GetProducts()
         {
-            return GetList().Where(x=> x.IsActive).Select(x => new ProductViewModel()
+            return GetList().Where(x => x.IsActive).Select(x => new ProductViewModel()
             {
                 Id = x.Id,
-                FullDescription = x.FullDescription ?? string.Empty,                
+                FullDescription = x.FullDescription ?? string.Empty,
                 SmallDescription = x.SmallDescription ?? string.Empty,
                 Title = x.Title,
-                Details = x.Details?.Select(x=> new DetailsViewModel()
+                Details = x.Details?.Select(x => new DetailsViewModel()
                 {
                     Key = x.Key ?? string.Empty,
                     Value = x.Value.ToString() ?? string.Empty
@@ -41,29 +41,29 @@ namespace DAL.Services
             var product = Get(id);
             if (product == null)
             {
-                return new ProductViewModel() 
-                { 
-                    Categorias = [.. _categoryService.Value.GetCategories().Select(x=> new SelectListItem()
+                return new ProductViewModel()
                 {
-                    Text = x.Title,
-                    Value = x.Id.ToString()
-                })],
+                    Categorias = [.. _categoryService.Value.GetCategories().Select(x=> new SelectListItem()
+                    {
+                        Text = x.Title,
+                        Value = x.Id.ToString()
+                    })],
                 };
             }
             return new ProductViewModel()
             {
                 Id = product.Id,
-                FullDescription = product.FullDescription ?? string.Empty,         
+                FullDescription = product.FullDescription ?? string.Empty,
                 SmallDescription = product.SmallDescription ?? string.Empty,
                 Title = product.Title,
-                Details = product.Details?.Select(x=> new DetailsViewModel()
+                Details = product.Details?.Select(x => new DetailsViewModel()
                 {
                     Key = x.Key ?? string.Empty,
                     Value = x.Value.ToString() ?? string.Empty
                 }).ToList() ?? [],
                 Price = product.Price,
                 Stock = product.Stock,
-                DateAdded = product.DateAdded, 
+                DateAdded = product.DateAdded,
                 Categorias = [.. _categoryService.Value.GetCategories().Select(x=> new SelectListItem()
                 {
                     Text = x.Title,
@@ -72,64 +72,51 @@ namespace DAL.Services
                 CategoryId = product.CategoryId,
                 ProductImages = _productImageService.GetProductImages(product.Id)
             };
-        }          
-        
-        public Guid AddProduct(ProductViewModel productViewModel)
-        {
-            var product = new Product()
-            {
-                Id = Guid.NewGuid(),
-                Title = productViewModel.Title ?? string.Empty,
-                FullDescription = productViewModel.FullDescription ?? string.Empty,
-                SmallDescription = productViewModel.SmallDescription ?? string.Empty,
-                Details = productViewModel.Details?
-                    .Where(d => !string.IsNullOrEmpty(d.Key))
-                    .ToDictionary(
-                        d => d.Key ?? string.Empty, 
-                        d => (object?)d.Value ?? string.Empty
-                    ) ?? [],
-                Price = productViewModel.Price,
-                Stock = productViewModel.Stock,
-                DateAdded = DateTime.UtcNow,
-                IsActive = true,
-                CategoryId = productViewModel.CategoryId               
-            };
-
-            return Add(product);
         }
 
-        public bool UpdateProduct(ProductViewModel viewModel)
+       
+        public Guid AddOrUpdateProduct(ProductViewModel viewModel)
         {
-            var productToUpdate = Get(viewModel.Id);
+            var productToAddOrUpdate = Get(viewModel.Id) ?? new Product();
 
-            productToUpdate.Title = viewModel.Title ?? string.Empty;
-            productToUpdate.FullDescription = viewModel.FullDescription;
-            productToUpdate.SmallDescription = viewModel.SmallDescription;            
-            productToUpdate.Details = viewModel.Details?
+            productToAddOrUpdate.Title = viewModel.Title ?? string.Empty;
+            productToAddOrUpdate.FullDescription = viewModel.FullDescription;
+            productToAddOrUpdate.SmallDescription = viewModel.SmallDescription;
+            productToAddOrUpdate.Details = viewModel.Details?
                 .Where(d => !string.IsNullOrEmpty(d.Key))
                 .ToDictionary(
-                    d => d.Key ?? string.Empty, 
+                    d => d.Key ?? string.Empty,
                     d => (object?)d.Value ?? string.Empty
                 ) ?? [];
-            productToUpdate.Price = viewModel.Price;
-            productToUpdate.Stock = viewModel.Stock;
-            productToUpdate.ProductImages = _productImageService.GetList().Where(x=> x.ProductId == viewModel.Id).ToList();
-            productToUpdate.CategoryId = viewModel.CategoryId;
-            if (productToUpdate.ProductImages.Count > 0)
+            productToAddOrUpdate.Price = viewModel.Price;
+            productToAddOrUpdate.Stock = viewModel.Stock;
+            productToAddOrUpdate.ProductImages = _productImageService.GetList().Where(x => x.ProductId == viewModel.Id).ToList();
+            productToAddOrUpdate.CategoryId = viewModel.CategoryId;
+            productToAddOrUpdate.IsActive = true;
+            if (productToAddOrUpdate.ProductImages.Count > 0)
             {
                 foreach (var i in viewModel.ProductImages)
                 {
-                    var image = productToUpdate.ProductImages.FirstOrDefault(x => x.Id == i.Id);
+                    var image = productToAddOrUpdate.ProductImages.FirstOrDefault(x => x.Id == i.Id);
                     if (image != null)
                     {
                         image.Order = i.Order;
                     }
                 }
-            }           
+            }
 
             try
             {
-                if(viewModel.ImageUploadFiles != null && viewModel.ImageUploadFiles.Count > 0)
+                
+                if (viewModel.Id == Guid.Empty)
+                {
+                    Add(productToAddOrUpdate);
+                }
+                else
+                {
+                    Update(productToAddOrUpdate);
+                }
+                if (viewModel.ImageUploadFiles != null && viewModel.ImageUploadFiles.Count > 0)
                 {
                     foreach (var file in viewModel.ImageUploadFiles)
                     {
@@ -140,7 +127,7 @@ namespace DAL.Services
                             var productImage = new ProductImage()
                             {
                                 Id = Guid.NewGuid(),
-                                ProductId = productToUpdate.Id,
+                                ProductId = productToAddOrUpdate.Id,
                                 ImagePath = imagePath,
                                 Order = file.Order ?? 0
                             };
@@ -148,24 +135,23 @@ namespace DAL.Services
                         }
                     }
                 }
-                Update(productToUpdate);
 
             }
             catch (Exception e)
             {
-                return false;
+                return Guid.Empty;
             }
 
-            return true;
+            return productToAddOrUpdate.Id;
         }
     }
-    
+
     public class ProductImageService(IWebHostEnvironment webHostEnvironment) : BaseService<ProductImage>, IProductImageService
     {
         private readonly IWebHostEnvironment _env = webHostEnvironment;
         public List<ProductImageViewModel> GetProductImages(Guid productId)
         {
-            var imagesList = GetList().Where(x => x.ProductId == productId && !string.IsNullOrEmpty(x.ImagePath)).OrderBy(x=> x.Order).ToList();
+            var imagesList = GetList().Where(x => x.ProductId == productId && !string.IsNullOrEmpty(x.ImagePath)).OrderBy(x => x.Order).ToList();
 
             return imagesList.Count > 0 ? [.. imagesList.Select(x=> new ProductImageViewModel()
             {
@@ -174,14 +160,14 @@ namespace DAL.Services
                 Order = x.Order
             })] : [];
         }
-        
-        
+
+
         public async Task<string> SaveFile(IFormFile file, string name)
         {
             var path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @".\..\Ecommerce\wwwroot\images\products"));
             var relativePath = "~/images/products/";
 
-            
+
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);

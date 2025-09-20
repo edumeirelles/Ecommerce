@@ -22,6 +22,7 @@ namespace DAL.ViewModels
         public DateTime DateAdded { get; set; }
         public Guid CategoryId { get; set; }
         [Display(Name = "Categoria")]
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public List<SelectListItem> Categorias { get; set; } = [];
         public List<ProductImageViewModel> ProductImages { get; set; } = [];
 

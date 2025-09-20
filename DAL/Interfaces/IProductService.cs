@@ -7,9 +7,8 @@ namespace DAL.Interfaces
     public interface IProductService : IBaseService<Product>, IDisposable
     {
         List<ProductViewModel>? GetProducts();
-        ProductViewModel? GetProduct(Guid id);
-        Guid AddProduct(ProductViewModel productViewModel);
-        bool UpdateProduct(ProductViewModel productViewModel);
+        ProductViewModel? GetProduct(Guid id);        
+        Guid AddOrUpdateProduct(ProductViewModel productViewModel);
     }
     public interface IProductImageService : IBaseService<ProductImage>, IDisposable
     {
