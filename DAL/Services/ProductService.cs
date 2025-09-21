@@ -16,7 +16,7 @@ namespace DAL.Services
 
         public List<ProductViewModel> GetProducts()
         {
-            return GetList().Where(x => x.IsActive).Select(x => new ProductViewModel()
+            return [.. GetList().Where(x => x.IsActive).Select(x => new ProductViewModel()
             {
                 Id = x.Id,
                 FullDescription = x.FullDescription ?? string.Empty,
@@ -33,7 +33,7 @@ namespace DAL.Services
                 CategoryId = x.CategoryId,
                 ProductImages = _productImageService.GetProductImages(x.Id)
 
-            }).ToList();
+            })];
         }
 
         public ProductViewModel GetProduct(Guid id)
@@ -106,8 +106,7 @@ namespace DAL.Services
             }
 
             try
-            {
-                
+            {                
                 if (viewModel.Id == Guid.Empty)
                 {
                     Add(productToAddOrUpdate);
