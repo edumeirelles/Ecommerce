@@ -115,6 +115,7 @@ namespace DAL.Services
                 {
                     Update(productToAddOrUpdate);
                 }
+
                 if (viewModel.ImageUploadFiles != null && viewModel.ImageUploadFiles.Count > 0)
                 {
                     foreach (var file in viewModel.ImageUploadFiles)
@@ -134,7 +135,6 @@ namespace DAL.Services
                         }
                     }
                 }
-
             }
             catch (Exception e)
             {
@@ -145,9 +145,8 @@ namespace DAL.Services
         }
     }
 
-    public class ProductImageService(IWebHostEnvironment webHostEnvironment) : BaseService<ProductImage>, IProductImageService
-    {
-        private readonly IWebHostEnvironment _env = webHostEnvironment;
+    public class ProductImageService : BaseService<ProductImage>, IProductImageService
+    {       
         public List<ProductImageViewModel> GetProductImages(Guid productId)
         {
             var imagesList = GetList().Where(x => x.ProductId == productId && !string.IsNullOrEmpty(x.ImagePath)).OrderBy(x => x.Order).ToList();
@@ -163,6 +162,7 @@ namespace DAL.Services
 
         public async Task<string> SaveFile(IFormFile file, string name)
         {
+            
             var path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @".\..\Ecommerce\wwwroot\images\products"));
             var relativePath = "~/images/products/";
 

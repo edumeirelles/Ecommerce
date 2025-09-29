@@ -35,7 +35,7 @@
                 @for (var i = 0; i < Model.ProductImages.Count(); i++)
                 {
                     @Html.HiddenFor(x => x.ProductImages[i].Id)
-                    <div class="col-2 ">
+                    <div class="col-3">
                         <div class="card">
                             <div class="card-body p-0">
                                 <img src="@Url.Content(Model.ProductImages[i].ImagePath)" class="product-image" />
@@ -43,6 +43,7 @@
                             <div class="card-footer d-inline-flex" style="padding:10px">
                                 <label class="col-form-label me-1"><small>Ordem:</small></label>
                                 @Html.EditorFor(x => x.ProductImages[i].Order, new { htmlAttributes = new { @class = "form-control" } })
+                                <button class="btn btn-sm btn-outline-danger mx-1 btn-remove-img" data-id="@Model.ProductImages[i].Id"><i class="ti ti-trash"></i></button>
                             </div>
                         </div>
                     </div>

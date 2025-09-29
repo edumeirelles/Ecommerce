@@ -46,6 +46,7 @@ namespace DAL.ViewModels
     public class ImageUploadViewModel
     {
         public IFormFile? ImageUploadFile { get; set; }
+        public Guid ProductId { get; set; }
         public int? Order { get; set; }
     }
 }
