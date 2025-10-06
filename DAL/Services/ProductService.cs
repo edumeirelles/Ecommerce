@@ -32,7 +32,6 @@ namespace DAL.Services
                 DateAdded = x.DateAdded,
                 CategoryId = x.CategoryId,
                 ProductImages = _productImageService.GetProductImages(x.Id)
-
             })];
         }
 
@@ -72,9 +71,8 @@ namespace DAL.Services
                 CategoryId = product.CategoryId,
                 ProductImages = _productImageService.GetProductImages(product.Id)
             };
-        }
+        }        
 
-       
         public Guid AddOrUpdateProduct(ProductViewModel viewModel)
         {
             var productToAddOrUpdate = Get(viewModel.Id) ?? new Product();

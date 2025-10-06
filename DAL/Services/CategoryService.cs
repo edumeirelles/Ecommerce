@@ -7,7 +7,6 @@ namespace DAL.Services
 {
     public class CategoryService(IProductService productService) : BaseService<Category>, ICategoryService
     {
-
         private readonly IProductService _productService = productService;
         public List<CategoryViewModel> GetCategories()
         {

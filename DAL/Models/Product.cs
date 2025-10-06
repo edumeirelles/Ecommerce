@@ -18,7 +18,7 @@ namespace DAL.Models
         public Dictionary<string, object>? Details { get; set; }
         public DateTime DateAdded { get; set; } = DateTime.UtcNow;
         public bool IsActive { get; set; }
-        public Guid CategoryId { get; set; }
+        public Guid? CategoryId { get; set; }
         public virtual Category Category { get; set; }
         public virtual ICollection<ProductImage> ProductImages { get; set; } = [];
       

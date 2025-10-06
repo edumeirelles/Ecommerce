@@ -7,11 +7,13 @@ namespace Admin.Controllers
 {
     public class ProductsController(ICategoryService categoryService, IProductService productService, ISiteConfigService siteConfigService) : BaseController(categoryService, productService, siteConfigService)
     {
+       
         public IActionResult Index()
         {
             var viewModel = _productService.GetProducts();
             return View(viewModel);
         }
+        
         [HttpGet]
         public IActionResult ProductDetails(Guid id)
         {            
@@ -21,8 +23,7 @@ namespace Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RequestFormLimits(ValueCountLimit = int.MaxValue)]
-       
+        [RequestFormLimits(ValueCountLimit = int.MaxValue)]       
         public IActionResult ProductDetails(ProductViewModel viewModel)
         {
             if (!ModelState.IsValid)
