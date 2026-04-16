@@ -57,13 +57,7 @@ namespace DAL
                 ));
 
             modelBuilder.Entity<Product>().Property(p => p.Details).HasColumnType("nvarchar(max)");
-            
-            modelBuilder.Entity<Product>()
-                .HasOne(p => p.Category)
-                .WithMany(c => c.Products)
-                .HasForeignKey("CategoryId")
-                .OnDelete(DeleteBehavior.Cascade);
-
+           
             modelBuilder.Entity<ProductImage>()
                 .HasOne(p=> p.Product)
                 .WithMany(p => p.ProductImages)

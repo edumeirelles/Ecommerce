@@ -28,7 +28,7 @@ namespace Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("ProductDetails", new { id = viewModel.Id });
+                return View("ProductDetails");
             }
             var productId = _productService.AddOrUpdateProduct(viewModel);
             if (productId == Guid.Empty)

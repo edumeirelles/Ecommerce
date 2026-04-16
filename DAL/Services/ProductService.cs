@@ -89,7 +89,7 @@ namespace DAL.Services
             productToAddOrUpdate.Price = viewModel.Price;
             productToAddOrUpdate.Stock = viewModel.Stock;
             productToAddOrUpdate.ProductImages = _productImageService.GetList().Where(x => x.ProductId == viewModel.Id).ToList();
-            productToAddOrUpdate.CategoryId = viewModel.CategoryId;
+            productToAddOrUpdate.CategoryId = viewModel.CategoryId.HasValue && viewModel.CategoryId != Guid.Empty ? viewModel.CategoryId : null;
             productToAddOrUpdate.IsActive = true;
             if (productToAddOrUpdate.ProductImages.Count > 0)
             {
@@ -116,22 +116,7 @@ namespace DAL.Services
 
                 if (viewModel.ImageUploadFiles != null && viewModel.ImageUploadFiles.Count > 0)
                 {
-                    foreach (var file in viewModel.ImageUploadFiles)
-                    {
-                        if (file.ImageUploadFile != null && file.ImageUploadFile.Length > 0)
-                        {
-                            var name = $"{Guid.NewGuid()}{Path.GetExtension(file.ImageUploadFile.FileName)}";
-                            var imagePath = _productImageService.SaveFile(file.ImageUploadFile, name).Result;
-                            var productImage = new ProductImage()
-                            {
-                                Id = Guid.NewGuid(),
-                                ProductId = productToAddOrUpdate.Id,
-                                ImagePath = imagePath,
-                                Order = file.Order ?? 0
-                            };
-                            _productImageService.Add(productImage);
-                        }
-                    }
+                    _productImageService.SaveImages(viewModel.ImageUploadFiles, productToAddOrUpdate.Id);
                 }
             }
             catch (Exception e)
@@ -153,9 +138,11 @@ namespace DAL.Services
             {
                 Id = x.Id,
                 ImagePath = x.ImagePath,
-                Order = x.Order
+                Order = x.Order,
+                IsDeleted = false
             })] : [];
         }
+
 
 
         public async Task<string> SaveFile(IFormFile file, string name)
@@ -177,6 +164,26 @@ namespace DAL.Services
             }
 
             return Path.Combine(relativePath + filename);
+        }
+
+        public void SaveImages(List<ImageUploadViewModel> images, Guid productId)
+        {
+            foreach (var file in images)
+            {
+                if (file.ImageUploadFile != null && file.ImageUploadFile.Length > 0)
+                {
+                    var name = $"{Guid.NewGuid()}{Path.GetExtension(file.ImageUploadFile.FileName)}";
+                    var imagePath = SaveFile(file.ImageUploadFile, name).Result;
+                    var productImage = new ProductImage()
+                    {
+                        Id = Guid.NewGuid(),
+                        ProductId = productId,
+                        ImagePath = imagePath,
+                        Order = file.Order ?? 0
+                    };
+                    Add(productImage);
+                }
+            }
         }
     }
 

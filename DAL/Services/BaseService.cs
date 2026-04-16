@@ -17,7 +17,7 @@ namespace DAL.Services
 
         public List<T> GetList()
         {
-            return _db.Set<T>().ToList();
+            return [.. _db.Set<T>()];
         }
 
         public Guid Add(T item)

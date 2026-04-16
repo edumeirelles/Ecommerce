@@ -14,5 +14,6 @@ namespace DAL.Interfaces
     {
         List<ProductImageViewModel> GetProductImages(Guid productId);
         Task<string> SaveFile(IFormFile file, string fileName);
+        void SaveImages(List<ImageUploadViewModel> images, Guid productId);
     }
 }

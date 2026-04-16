@@ -20,9 +20,8 @@ namespace DAL.ViewModels
         [Display(Name = "Detalhes")]
         public List<DetailsViewModel>? Details { get; set; }
         public DateTime DateAdded { get; set; }
-        public Guid? CategoryId { get; set; }
-        [Display(Name = "Categoria")]
-        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        public Guid? CategoryId { get; set; } = Guid.Empty;
+        [Display(Name = "Categoria")]       
         public List<SelectListItem> Categorias { get; set; } = [];
         public List<ProductImageViewModel> ProductImages { get; set; } = [];
 
@@ -41,6 +40,7 @@ namespace DAL.ViewModels
     {        
         public string? ImagePath { get; set; }
         public int? Order { get; set; }
+        public bool IsDeleted { get; set; }
 
     }
     public class ImageUploadViewModel
